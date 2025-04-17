@@ -41,7 +41,6 @@ public class CameraMoving : MonoBehaviour
         camRot += QEAction.ReadValue<float>();
         ZoomCam();
         CameraLerpRot();
-        CameraLerpPos();
     }
 
     private void FixedUpdate()
@@ -54,9 +53,10 @@ public class CameraMoving : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, target, camRotLerpSpeed * Time.deltaTime);
         
     }
-    void CameraLerpPos()
+    void CameraLerpPos(GameObject player, GameObject camera, float speed)
     {
-        Quaternion reRot = Quaternion.Euler(0, -camRot * CamVecRotSpeed, 0);
+        float deltaspeed = CamVecRotSpeed * Time.deltaTime;
+        Quaternion reRot = Quaternion.Euler(0, -camRot * deltaspeed, 0);
         nextCamPos = (Player.transform.position + reRot * cameraVec / zoomCam);//기즈모로 표시해둔 빨간 원 
         camera.transform.position = Vector3.Lerp(camera.transform.position, nextCamPos, camPosLerpSpeed * Time.deltaTime);
     }
@@ -64,7 +64,7 @@ public class CameraMoving : MonoBehaviour
     {
         zoomCam += ((Input.GetAxis("Mouse ScrollWheel")));//스크롤 리턴값 -0.1 ~ 0.1
         zoomCam = Mathf.Clamp(zoomCam, minZoom, maxZoom);
-        CameraLerpPos();
+        CameraLerpPos(Player, camera, CamVecRotSpeed);
     }
     private void OnDrawGizmos()
     {
