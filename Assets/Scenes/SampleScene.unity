@@ -2524,7 +2524,7 @@ MonoBehaviour:
   meshResolution: 10
   meshResolveIterations: 6
   edgeDstThreshold: 0.5
-  maskCutawayDst: 3
+  maskCutawayDst: 0
   viewMeshFilter: {fileID: 385968445}
 --- !u!108 &2035742460
 Light:
