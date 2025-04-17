@@ -11,6 +11,7 @@ public class FieldOfView : MonoBehaviour {
     int obstaclelayermask;
 
     public List<Transform> visibleTargets = new List<Transform>();
+    //public List<Transform> visibleTargets = new ();
 
     public float meshResolution;
 
@@ -22,6 +23,7 @@ public class FieldOfView : MonoBehaviour {
 
     public MeshFilter viewMeshFilter;
     Mesh viewMesh;
+
     private void Start()
     {
         viewMesh = new Mesh();
@@ -74,6 +76,7 @@ public class FieldOfView : MonoBehaviour {
         float stepAngleSize = viewAngle / stepCount;
         List<Vector3> ViewPoints = new List<Vector3>();
         ViewCastInfo oldViewCast = new ViewCastInfo();
+
         for (int i = 0; i <= stepCount; i++)
         {
             float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
@@ -98,11 +101,12 @@ public class FieldOfView : MonoBehaviour {
             ViewPoints.Add(newViewCast.point);
             oldViewCast = newViewCast;
         }
+
         int vertexCount = ViewPoints.Count + 1;
         Vector3[] vertices = new Vector3[vertexCount];
         int[] triangle = new int[(vertexCount - 2) * 3];
 
-        //Debug.Log(ViewPoints.Count);
+        Debug.Log(ViewPoints.Count);
 
         vertices[0] = new Vector3(0, -0.95f, 0);//삼각형이 처음 생성될 위치
         for(int i = 0; i < vertexCount - 1; i++)
@@ -110,7 +114,7 @@ public class FieldOfView : MonoBehaviour {
             vertices[i + 1] = transform.InverseTransformPoint(ViewPoints[i]) + Vector3.forward * maskCutawayDst; //내가 아닌 삼각형의 정점(꼭짓점) 좌표 저장~~
 
             if (i < vertexCount - 2)//매쉬를 생성할 때 vertices에 들어갈 정점의 인덱스 위치를 표현.
-           {
+            {
                 triangle[i * 3] = 0;
                 triangle[i * 3 + 1] = i + 1;
                 triangle[i * 3 + 2] = i + 2;
@@ -148,6 +152,7 @@ public class FieldOfView : MonoBehaviour {
                 maxPoint = newViewCast.point;
             }
         }
+
         return new EdgeInfo(minPoint, maxPoint);
     }
 
@@ -158,6 +163,7 @@ public class FieldOfView : MonoBehaviour {
         {
             angleInDegrees += transform.eulerAngles.y; //플레이어의 y축 각도 값 더함
         }
+
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
@@ -165,12 +171,12 @@ public class FieldOfView : MonoBehaviour {
     {
         Vector3 dir = DirFromAngle(globalAngle, true);
         RaycastHit hitinfo;
+
         if(Physics.Raycast(transform.position + new Vector3(0,-0.95f,0), dir, out hitinfo, viewRadius, obstaclelayermask)){
             return new ViewCastInfo(true, hitinfo.point, hitinfo.distance, globalAngle);
-        }else
-        {
-            return new ViewCastInfo(false, transform.position + new Vector3(0, -0.95f, 0) + dir * viewRadius, viewRadius, globalAngle);
         }
+        
+        return new ViewCastInfo(false, transform.position + new Vector3(0, -0.95f, 0) + dir * viewRadius, viewRadius, globalAngle);
     }
 
     public struct ViewCastInfo
@@ -200,6 +206,5 @@ public class FieldOfView : MonoBehaviour {
             pointB = _pointB;
         }
     }
-
 
 }

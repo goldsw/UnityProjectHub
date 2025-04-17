@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,7 +13,6 @@ public class CameraMoving : MonoBehaviour
     public float minZoom = 1f;
     public float CamVecRotSpeed = 1;
 
-
     public GameObject camera;
     float camRot = 0;//카메라 벡터 위치 각도 돌려주는거, 로컬 각도 아님
     private Vector3 nextCamPos;
@@ -23,6 +20,7 @@ public class CameraMoving : MonoBehaviour
 
     PlayerIO _playerio;
     InputAction QEAction;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,9 +41,9 @@ public class CameraMoving : MonoBehaviour
         CameraLerpRot();
     }
 
-    private void FixedUpdate()
-    {
-    }
+    //private void FixedUpdate()
+    //{
+    //}
 
     void CameraLerpRot()
     {
@@ -53,6 +51,7 @@ public class CameraMoving : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, target, camRotLerpSpeed * Time.deltaTime);
         
     }
+
     void CameraLerpPos(GameObject player, GameObject camera, float speed)
     {
         float deltaspeed = CamVecRotSpeed * Time.deltaTime;
@@ -60,12 +59,14 @@ public class CameraMoving : MonoBehaviour
         nextCamPos = (Player.transform.position + reRot * cameraVec / zoomCam);//기즈모로 표시해둔 빨간 원 
         camera.transform.position = Vector3.Lerp(camera.transform.position, nextCamPos, camPosLerpSpeed * Time.deltaTime);
     }
+
     void ZoomCam()
     {
         zoomCam += ((Input.GetAxis("Mouse ScrollWheel")));//스크롤 리턴값 -0.1 ~ 0.1
         zoomCam = Mathf.Clamp(zoomCam, minZoom, maxZoom);
         CameraLerpPos(Player, camera, CamVecRotSpeed);
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

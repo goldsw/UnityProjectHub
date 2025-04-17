@@ -20,17 +20,13 @@ public class Controller : MonoBehaviour {
 
 	public void RotActionKey(InputAction.CallbackContext value)
     {
-		
 		rotcacul = value.started || value.performed; //눌렀는가. 아직 안땠는가
-		
     }
-	public void OnMove(InputAction.CallbackContext value)
-	{
-		
-	}
 
-
-	
+	//public void OnMove(InputAction.CallbackContext value)
+	//{
+	//	
+	//}
 
 	void Update () {
 		velocity = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical")).normalized * moveSpeed;
@@ -40,13 +36,15 @@ public class Controller : MonoBehaviour {
 		Debug.Log(Input.mousePosition);
 	}
 
-	void FixedUpdate() {
-	}
+	//void FixedUpdate()
+	//{
+	//
+	//}
 
-	public void NewNextPos(float Angle)
-    {
-
-    }
+	//public void NewNextPos(float Angle)
+    //{
+	//
+    //}
 	
 	void LookMousePos() {
 		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());//얘는 XY만 가져오고 z를 따로 가져오지 않음 vector2
@@ -56,12 +54,12 @@ public class Controller : MonoBehaviour {
 		mousePointDis.y = 0;
 		transform.rotation = Quaternion.LookRotation(mousePointDis);
 	}
+
     private void OnDrawGizmos()
     {
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//얘는 마우스의 z좌표가 0이라고 가정한 vector3 값임
 		RaycastHit hit;
 		
-
 		if (Physics.Raycast(ray, out hit, 100f, layerMask))
 		{
 
