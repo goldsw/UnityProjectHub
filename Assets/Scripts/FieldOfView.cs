@@ -108,10 +108,10 @@ public class FieldOfView : MonoBehaviour {
 
         Debug.Log(ViewPoints.Count);
 
-        vertices[0] = new Vector3(0, -0.95f, 0);//삼각형이 처음 생성될 위치
+        vertices[0] = new Vector3(0, 0, 0);//삼각형이 처음 생성될 위치
         for(int i = 0; i < vertexCount - 1; i++)
         {
-            vertices[i + 1] = transform.InverseTransformPoint(ViewPoints[i]) + Vector3.forward * maskCutawayDst; //내가 아닌 삼각형의 정점(꼭짓점) 좌표 저장~~
+            vertices[i + 1] = transform.InverseTransformPoint(ViewPoints[i]) + Vector3.forward * maskCutawayDst + new Vector3(0,2,0); //내가 아닌 삼각형의 정점(꼭짓점) 좌표 저장~~
 
             if (i < vertexCount - 2)//매쉬를 생성할 때 vertices에 들어갈 정점의 인덱스 위치를 표현.
             {
@@ -156,6 +156,18 @@ public class FieldOfView : MonoBehaviour {
         return new EdgeInfo(minPoint, maxPoint);
     }
 
+    ViewCastInfo ViewCast(float globalAngle)
+    {
+        Vector3 dir = DirFromAngle(globalAngle, true);
+        RaycastHit hitinfo;
+
+        if(Physics.Raycast(transform.position, dir, out hitinfo, viewRadius, obstaclelayermask)){
+            return new ViewCastInfo(true, hitinfo.point, hitinfo.distance, globalAngle);
+        }
+        
+        return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, globalAngle);
+    }
+
 
     public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
     {
@@ -165,18 +177,6 @@ public class FieldOfView : MonoBehaviour {
         }
 
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
-    }
-
-    ViewCastInfo ViewCast(float globalAngle)
-    {
-        Vector3 dir = DirFromAngle(globalAngle, true);
-        RaycastHit hitinfo;
-
-        if(Physics.Raycast(transform.position + new Vector3(0,-0.95f,0), dir, out hitinfo, viewRadius, obstaclelayermask)){
-            return new ViewCastInfo(true, hitinfo.point, hitinfo.distance, globalAngle);
-        }
-        
-        return new ViewCastInfo(false, transform.position + new Vector3(0, -0.95f, 0) + dir * viewRadius, viewRadius, globalAngle);
     }
 
     public struct ViewCastInfo
