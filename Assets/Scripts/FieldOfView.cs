@@ -106,7 +106,6 @@ public class FieldOfView : MonoBehaviour {
         Vector3[] vertices = new Vector3[vertexCount];
         int[] triangle = new int[(vertexCount - 2) * 3];
 
-        Debug.Log(ViewPoints.Count);
 
         vertices[0] = new Vector3(0, 0, 0);//삼각형이 처음 생성될 위치
         for(int i = 0; i < vertexCount - 1; i++)

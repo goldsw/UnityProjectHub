@@ -35,7 +35,6 @@ public class CameraMoving : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log( QEAction.ReadValue<float>());
         camRot += QEAction.ReadValue<float>();
         ZoomCam();
         CameraLerpPos(Player, camera, CamVecRotSpeed);

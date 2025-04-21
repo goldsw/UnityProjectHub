@@ -5,17 +5,23 @@ using UnityEngine.InputSystem;
 public class Controller : MonoBehaviour {
 
 	public float moveSpeed = 6;
-	Rigidbody myRigidbody;
 	public LayerMask layerMask;
-	Vector3 velocity;
 	public PlayerIO _playerIO;
+	public float jumpSpeed;
+	CapsuleCollider Pcollider;
+
+	Rigidbody myRigidbody;
+	Vector3 velocity;
+	Animator anim;
+
 	bool rotcacul = false;//테스트용 지우지 마세요
-	float Angle = 0;//테스트용 지우지 마세요
+	bool isJump = false;//테스트용 지우지 마세요
 
 	void Start () {
 		_playerIO = new PlayerIO();
 		myRigidbody = GetComponent<Rigidbody> ();
-		Angle = _playerIO.KeyBoard.Action.ReadValue<float>();
+		anim = GetComponentInChildren<Animator>();
+		Pcollider = GetComponent<CapsuleCollider>();
 	}
 
 	public void RotActionKey(InputAction.CallbackContext value)
@@ -23,17 +29,12 @@ public class Controller : MonoBehaviour {
 		rotcacul = value.started || value.performed; //눌렀는가. 아직 안땠는가
     }
 
-	//public void OnMove(InputAction.CallbackContext value)
-	//{
-	//	
-	//}
 
 	void Update () {
 		velocity = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical")).normalized * moveSpeed;
 		LookMousePos();
 		myRigidbody.MovePosition (myRigidbody.position + velocity * Time.deltaTime);
-		Debug.Log(Mouse.current.position.ReadValue());
-		Debug.Log(Input.mousePosition);
+
 	}
 
 	//void FixedUpdate()
@@ -45,7 +46,43 @@ public class Controller : MonoBehaviour {
     //{
 	//
     //}
-	
+	public void OnMove(InputAction.CallbackContext value)
+	{
+
+		anim.SetBool("isWalking", value.performed);
+	}
+	public void Jump(InputAction.CallbackContext value)
+    {
+        if (value.started)
+        {
+			Jumping();
+        }
+    }
+	void Jumping()
+    {
+		Debug.Log(IsGrounded());
+
+		if (IsGrounded())
+		{
+			anim.SetTrigger("isJump");
+			myRigidbody.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+			
+		}
+		
+	}
+
+	bool IsGrounded()
+    {
+		RaycastHit hitinfo;
+		Physics.Raycast(transform.position, Vector3.down, out hitinfo);
+		Debug.Log(hitinfo.distance);
+		if (hitinfo.distance <= Pcollider.height / 2 + 0.1f)
+			return true;
+		else
+			return false;
+
+	}
+
 	void LookMousePos() {
 		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());//얘는 XY만 가져오고 z를 따로 가져오지 않음 vector2
 		RaycastHit hitinfo;
