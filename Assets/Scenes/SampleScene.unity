@@ -2540,11 +2540,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3ce368a8d8474fcbbed4f32d233445c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 6
+  walkSpeed: 6
+  sprintSpeed: 12
   layerMask:
     serializedVersion: 2
     m_Bits: 256
-  jumpSpeed: 50
+  JumpPow: 50
+  acceleration: 7
+  deceleration: 6
 --- !u!54 &2035742458
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2731,6 +2734,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 62d6414a-0bd1-44eb-a99e-22572f9d1abb
     m_ActionName: KeyBoard/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2035742457}
+        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+        m_MethodName: IsRun
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bb3a763d-b039-45d1-8b93-216179d517fd
+    m_ActionName: KeyBoard/Run[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: KeyBoard

@@ -4,12 +4,21 @@ using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviour {
 
-	public float moveSpeed = 6;
+	public float walkSpeed = 6;
+	public float sprintSpeed = 12;
 	public LayerMask layerMask;
 	public PlayerIO _playerIO;
-	public float jumpSpeed;
-	CapsuleCollider Pcollider;
+	public float JumpPow;
+	public float acceleration;
+	public float deceleration;
+	private float runAcc = 1;
 
+
+	private Vector3 currentVelocity = Vector3.zero;
+	bool isRuning;
+	float speed;
+	Vector2 MoveVec;
+	CapsuleCollider Pcollider;
 	Rigidbody myRigidbody;
 	Vector3 velocity;
 	Animator anim;
@@ -22,6 +31,7 @@ public class Controller : MonoBehaviour {
 		myRigidbody = GetComponent<Rigidbody> ();
 		anim = GetComponentInChildren<Animator>();
 		Pcollider = GetComponent<CapsuleCollider>();
+		speed = walkSpeed;
 	}
 
 	public void RotActionKey(InputAction.CallbackContext value)
@@ -31,10 +41,8 @@ public class Controller : MonoBehaviour {
 
 
 	void Update () {
-		velocity = new Vector3 (Input.GetAxisRaw ("Horizontal"), 0, Input.GetAxisRaw ("Vertical")).normalized * moveSpeed;
 		LookMousePos();
-		myRigidbody.MovePosition (myRigidbody.position + velocity * Time.deltaTime);
-
+		Move();
 	}
 
 	//void FixedUpdate()
@@ -48,9 +56,45 @@ public class Controller : MonoBehaviour {
     //}
 	public void OnMove(InputAction.CallbackContext value)
 	{
+		if (value.started)
+			runAcc = 1f;
 
+		MoveVec = value.ReadValue<Vector2>();
 		anim.SetBool("isWalking", value.performed);
 	}
+	public void IsRun(InputAction.CallbackContext value)
+	{
+        if (value.started)
+        {
+			speed = sprintSpeed;
+			anim.SetBool("isRun", true);
+			isRuning = true;
+			runAcc = 0.6f;
+        }
+		if (value.canceled)
+		{
+			speed = walkSpeed;
+			anim.SetBool("isRun", false);
+			isRuning = false;
+			runAcc = 0.1f;
+
+
+		}
+	}
+
+	void Move()
+    {
+		Vector3 targetVelocity = new Vector3(MoveVec.x, 0, MoveVec.y).normalized * speed;
+
+		float lerpFactor = (targetVelocity.sqrMagnitude > 0) ? acceleration : deceleration;
+
+		currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, lerpFactor * runAcc * Time.deltaTime);
+
+		Debug.Log(runAcc);
+		myRigidbody.MovePosition(myRigidbody.position + currentVelocity * Time.deltaTime);
+
+
+    }
 	public void Jump(InputAction.CallbackContext value)
     {
         if (value.started)
@@ -65,7 +109,7 @@ public class Controller : MonoBehaviour {
 		if (IsGrounded())
 		{
 			anim.SetTrigger("isJump");
-			myRigidbody.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
+			myRigidbody.AddForce(Vector3.up * JumpPow, ForceMode.Impulse);
 			
 		}
 		

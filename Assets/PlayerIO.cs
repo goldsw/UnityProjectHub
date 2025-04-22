@@ -53,6 +53,15 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Value"",
+                    ""id"": ""bb3a763d-b039-45d1-8b93-216179d517fd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -154,6 +163,17 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a76b49c9-5559-46e4-aefa-d2fae25d2f74"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -204,6 +224,7 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
         m_KeyBoard_Move = m_KeyBoard.FindAction("Move", throwIfNotFound: true);
         m_KeyBoard_Action = m_KeyBoard.FindAction("Action", throwIfNotFound: true);
         m_KeyBoard_Jump = m_KeyBoard.FindAction("Jump", throwIfNotFound: true);
+        m_KeyBoard_Run = m_KeyBoard.FindAction("Run", throwIfNotFound: true);
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_Mouse = m_Mouse.FindAction("Mouse", throwIfNotFound: true);
@@ -271,6 +292,7 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
     private readonly InputAction m_KeyBoard_Move;
     private readonly InputAction m_KeyBoard_Action;
     private readonly InputAction m_KeyBoard_Jump;
+    private readonly InputAction m_KeyBoard_Run;
     public struct KeyBoardActions
     {
         private @PlayerIO m_Wrapper;
@@ -278,6 +300,7 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_KeyBoard_Move;
         public InputAction @Action => m_Wrapper.m_KeyBoard_Action;
         public InputAction @Jump => m_Wrapper.m_KeyBoard_Jump;
+        public InputAction @Run => m_Wrapper.m_KeyBoard_Run;
         public InputActionMap Get() { return m_Wrapper.m_KeyBoard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -296,6 +319,9 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
         }
 
         private void UnregisterCallbacks(IKeyBoardActions instance)
@@ -309,6 +335,9 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
         }
 
         public void RemoveCallbacks(IKeyBoardActions instance)
@@ -377,6 +406,7 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnAction(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
     public interface IMouseActions
     {
