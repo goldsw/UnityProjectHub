@@ -15,13 +15,9 @@ public class Controller : MonoBehaviour {
 	private bool itIsExe = false;
 	private bool inertia_Check = false;
 
-	[SerializeField]
-	private float runDec_Inertia = 0.6f;
-	[SerializeField]
-	private float runInc_Inertia = 0.6f;
-	[SerializeField] 
+	private float runDec_Inertia = 0.5f;
+	private float runInc_Inertia = 0.5f; 
 	private float walkDec_Inertia = 1f;
-	[SerializeField]
 	private float walkInc_Inertia = 1f;
 
 	private Vector3 currentVelocity = Vector3.zero;
@@ -121,9 +117,8 @@ public class Controller : MonoBehaviour {
 	{
 		Vector3 targetVelocity = new Vector3(MoveVec.x, 0, MoveVec.y).normalized * speed;
 		float lerpFactor = (targetVelocity.sqrMagnitude > 0) ? acceleration : deceleration;
-		Vector3 desiredVelocity = Vector3.Lerp(myRigidbody.velocity, targetVelocity, lerpFactor * Time.fixedDeltaTime * 7);
+		Vector3 desiredVelocity = Vector3.Lerp(myRigidbody.velocity, targetVelocity, lerpFactor * Time.deltaTime * 7);
 
-		// y축 속도는 중력에 맡기기 위해 그대로 둡니다.
 		desiredVelocity.y = myRigidbody.velocity.y;
 
 		myRigidbody.velocity = desiredVelocity;
@@ -153,7 +148,7 @@ public class Controller : MonoBehaviour {
 		RaycastHit hitinfo;
 		Physics.Raycast(transform.position, Vector3.down, out hitinfo);
 		Debug.Log(hitinfo.distance);
-		if (hitinfo.distance <= Pcollider.height / 2 + 0.1f)
+		if (hitinfo.distance <= Pcollider.height / 2 + 0.3f)
 			return true;
 		else
 			return false;
