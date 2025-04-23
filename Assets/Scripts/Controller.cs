@@ -12,10 +12,20 @@ public class Controller : MonoBehaviour {
 	public float acceleration;
 	public float deceleration;
 	private float runAcc = 1;
+	private bool itIsExe = false;
+	private bool inertia_Check = false;
 
+	[SerializeField]
+	private float runDec_Inertia = 0.6f;
+	[SerializeField]
+	private float runInc_Inertia = 0.6f;
+	[SerializeField] 
+	private float walkDec_Inertia = 1f;
+	[SerializeField]
+	private float walkInc_Inertia = 1f;
 
 	private Vector3 currentVelocity = Vector3.zero;
-	bool isRuning;
+	bool isRuning = false;
 	float speed;
 	Vector2 MoveVec;
 	CapsuleCollider Pcollider;
@@ -42,6 +52,7 @@ public class Controller : MonoBehaviour {
 
 	void Update () {
 		LookMousePos();
+
 		Move();
 	}
 
@@ -56,45 +67,67 @@ public class Controller : MonoBehaviour {
     //}
 	public void OnMove(InputAction.CallbackContext value)
 	{
-		if (value.started)
-			runAcc = 1f;
+        if (value.started && !itIsExe && isRuning == false)
+        {
+			itIsExe = true;
+			StartCoroutine(RunInertia(walkDec_Inertia, walkInc_Inertia, isRuning));
+        }
 
 		MoveVec = value.ReadValue<Vector2>();
 		anim.SetBool("isWalking", value.performed);
 	}
 	public void IsRun(InputAction.CallbackContext value)
 	{
-        if (value.started)
+		if (value.started)//눌렀다
         {
-			speed = sprintSpeed;
 			anim.SetBool("isRun", true);
 			isRuning = true;
-			runAcc = 0.6f;
+			speed = sprintSpeed;
         }
-		if (value.canceled)
+		if (value.performed && !itIsExe)//누르고 있다
 		{
-			speed = walkSpeed;
+			Debug.Log("hi");
+			itIsExe = true;
+			StartCoroutine(RunInertia(runDec_Inertia, runInc_Inertia, isRuning));
+		}
+		if (value.canceled)//땠다
+		{
 			anim.SetBool("isRun", false);
 			isRuning = false;
-			runAcc = 0.1f;
+			speed = walkSpeed;
 
 
 		}
 	}
+	// _decIneria 는 멈출때의 관성이고, _inclnertia는 움직이려는 관성임. _check 값은 이걸 호출할 때 walk였는데 값이 바뀌면 코루틴을 멈춰줘야 하니까 넣은 값
+	IEnumerator RunInertia(float _decInertia, float _incInertia, bool _check)
+    {
+        while (isRuning == _check)
+        {
+			if((_check == false && acceleration > _incInertia - 0.05f) || (_check && acceleration + 0.05f < _incInertia))
+				break;
+
+			deceleration = Mathf.Lerp(deceleration, _decInertia, 0.4f);
+			acceleration = Mathf.Lerp(acceleration, _incInertia, 0.4f);
+
+			yield return new WaitForEndOfFrame();
+        }
+		itIsExe = false;
+		StopCoroutine("RunInertia");
+    }
+
 
 	void Move()
-    {
+	{
 		Vector3 targetVelocity = new Vector3(MoveVec.x, 0, MoveVec.y).normalized * speed;
-
 		float lerpFactor = (targetVelocity.sqrMagnitude > 0) ? acceleration : deceleration;
+		Vector3 desiredVelocity = Vector3.Lerp(myRigidbody.velocity, targetVelocity, lerpFactor * Time.fixedDeltaTime * 7);
 
-		currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, lerpFactor * runAcc * Time.deltaTime);
+		// y축 속도는 중력에 맡기기 위해 그대로 둡니다.
+		desiredVelocity.y = myRigidbody.velocity.y;
 
-		Debug.Log(runAcc);
-		myRigidbody.MovePosition(myRigidbody.position + currentVelocity * Time.deltaTime);
-
-
-    }
+		myRigidbody.velocity = desiredVelocity;
+	}
 	public void Jump(InputAction.CallbackContext value)
     {
         if (value.started)
