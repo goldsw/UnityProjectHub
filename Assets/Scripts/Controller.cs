@@ -11,10 +11,7 @@ public class Controller : MonoBehaviour {
 	public float JumpPow;
 	public float acceleration;
 	public float deceleration;
-	private float runAcc = 1;
 	private bool itIsExe = false;
-	private bool inertia_Check = false;
-
 	private float runDec_Inertia = 0.5f;
 	private float runInc_Inertia = 0.5f; 
 	private float walkDec_Inertia = 1f;
@@ -29,8 +26,8 @@ public class Controller : MonoBehaviour {
 	Vector3 velocity;
 	Animator anim;
 
-	bool rotcacul = false;//테스트용 지우지 마세요
-	bool isJump = false;//테스트용 지우지 마세요
+	bool rotcacul = false;
+	bool isJump = false;
 
 	void Start () {
 		_playerIO = new PlayerIO();
@@ -82,7 +79,6 @@ public class Controller : MonoBehaviour {
         }
 		if (value.performed && !itIsExe)//누르고 있다
 		{
-			Debug.Log("hi");
 			itIsExe = true;
 			StartCoroutine(RunInertia(runDec_Inertia, runInc_Inertia, isRuning));
 		}
@@ -132,7 +128,6 @@ public class Controller : MonoBehaviour {
     }
 	void Jumping()
     {
-		Debug.Log(IsGrounded());
 
 		if (IsGrounded())
 		{
@@ -147,7 +142,6 @@ public class Controller : MonoBehaviour {
     {
 		RaycastHit hitinfo;
 		Physics.Raycast(transform.position, Vector3.down, out hitinfo);
-		Debug.Log(hitinfo.distance);
 		if (hitinfo.distance <= Pcollider.height / 2 + 0.3f)
 			return true;
 		else
