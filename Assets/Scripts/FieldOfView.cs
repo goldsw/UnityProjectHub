@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class FieldOfView : MonoBehaviour {
     public float viewRadius;
-    [Range(0, 360)]
+    [Range(1, 360)]
     public float viewAngle;
 
     int enemylayermask;
@@ -21,11 +21,14 @@ public class FieldOfView : MonoBehaviour {
 
     public float maskCutawayDst = .1f;
 
+    Light light;
+
     public MeshFilter viewMeshFilter;
     Mesh viewMesh;
 
     private void Start()
     {
+        light = GetComponentInChildren<Light>();
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
@@ -36,6 +39,7 @@ public class FieldOfView : MonoBehaviour {
 
     private void Update()
     {
+        light.spotAngle = viewAngle;
         DrawFieldOfView();
     }
 

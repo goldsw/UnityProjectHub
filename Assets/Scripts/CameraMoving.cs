@@ -25,8 +25,10 @@ public class CameraMoving : MonoBehaviour
     void Start()
     {
         _playerio = new PlayerIO();
+
         QEAction = _playerio.KeyBoard.Action;//PlayerIO에 있는 Action을 가져옴. 자세한건 new input system을 찾아보세요 앞 QE는 Q와 E를 눌렀을때 나오는 액션
         QEAction.Enable();//꼭 활성화 해줘야함
+
         cameraVec = camera.transform.position - Player.transform.position;
         nextCamPos = (transform.position + cameraVec) * zoomCam;
         
