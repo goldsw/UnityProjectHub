@@ -62,6 +62,24 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""c3dfb0db-29af-425f-a835-9caa35673d57"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItemorGun"",
+                    ""type"": ""Button"",
+                    ""id"": ""b779134c-4b8b-4322-b8e7-f44937ac6283"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -174,6 +192,61 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
                     ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d4e3749-866a-4fcc-be0d-41621858a200"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25b68db9-e2be-458f-a3c0-41e93d4b65f4"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItemorGun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""80cef139-d2b1-41a0-8e68-1335005ec90c"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItemorGun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b12c88ab-df00-4ca4-ae9b-08df14f1c5a7"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItemorGun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93c235f4-90af-446a-8643-2ab03ef44618"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItemorGun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -225,6 +298,8 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
         m_KeyBoard_Action = m_KeyBoard.FindAction("Action", throwIfNotFound: true);
         m_KeyBoard_Jump = m_KeyBoard.FindAction("Jump", throwIfNotFound: true);
         m_KeyBoard_Run = m_KeyBoard.FindAction("Run", throwIfNotFound: true);
+        m_KeyBoard_Select = m_KeyBoard.FindAction("Select", throwIfNotFound: true);
+        m_KeyBoard_UseItemorGun = m_KeyBoard.FindAction("UseItemorGun", throwIfNotFound: true);
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_Mouse = m_Mouse.FindAction("Mouse", throwIfNotFound: true);
@@ -293,6 +368,8 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
     private readonly InputAction m_KeyBoard_Action;
     private readonly InputAction m_KeyBoard_Jump;
     private readonly InputAction m_KeyBoard_Run;
+    private readonly InputAction m_KeyBoard_Select;
+    private readonly InputAction m_KeyBoard_UseItemorGun;
     public struct KeyBoardActions
     {
         private @PlayerIO m_Wrapper;
@@ -301,6 +378,8 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
         public InputAction @Action => m_Wrapper.m_KeyBoard_Action;
         public InputAction @Jump => m_Wrapper.m_KeyBoard_Jump;
         public InputAction @Run => m_Wrapper.m_KeyBoard_Run;
+        public InputAction @Select => m_Wrapper.m_KeyBoard_Select;
+        public InputAction @UseItemorGun => m_Wrapper.m_KeyBoard_UseItemorGun;
         public InputActionMap Get() { return m_Wrapper.m_KeyBoard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -322,6 +401,12 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
+            @UseItemorGun.started += instance.OnUseItemorGun;
+            @UseItemorGun.performed += instance.OnUseItemorGun;
+            @UseItemorGun.canceled += instance.OnUseItemorGun;
         }
 
         private void UnregisterCallbacks(IKeyBoardActions instance)
@@ -338,6 +423,12 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
+            @UseItemorGun.started -= instance.OnUseItemorGun;
+            @UseItemorGun.performed -= instance.OnUseItemorGun;
+            @UseItemorGun.canceled -= instance.OnUseItemorGun;
         }
 
         public void RemoveCallbacks(IKeyBoardActions instance)
@@ -407,6 +498,8 @@ public partial class @PlayerIO: IInputActionCollection2, IDisposable
         void OnAction(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
+        void OnUseItemorGun(InputAction.CallbackContext context);
     }
     public interface IMouseActions
     {

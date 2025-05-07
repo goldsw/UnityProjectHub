@@ -1,47 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class WeaponSystem : MonoBehaviour
 {
-    private int pistolMask;
+    public PlayerIO _playerIO;
+    private int secondaryWeaponMasks;
+    private int mainWeaponMasks;
     public float gainGunRadius;
     public float findGunDelay;
-    private GameObject[] GunItem = new GameObject[2]; //나중에 사용할 변수
-    GameObject closeGun;
+    private GameObject[] GunItems = new GameObject[2]; //나중에 사용할 변수 0 1
+    GameObject selectGun;
     // Start is called before the first frame update
     void Start()
     {
-        pistolMask = 1 << LayerMask.NameToLayer("Pistol");
-        StartCoroutine(FindGun(findGunDelay));
+        _playerIO = new PlayerIO();
+        secondaryWeaponMasks = 1 << LayerMask.NameToLayer("Pistol");
+        mainWeaponMasks = 1 << LayerMask.NameToLayer("MachineGun");
+        StartCoroutine(FindGun());
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(GunItems[0]);
+        Debug.Log(GunItems[1]);
     }
 
-    IEnumerator FindGun(float delay)
+    IEnumerator FindGun()
     {
         while (true)
         {
-            Debug.Log(closeGun);
-            Debug.Log(FindGunInRedius(gainGunRadius, pistolMask).name);
-            yield return new WaitForSeconds(delay);
+            selectGun = FindGunInRedius(gainGunRadius, secondaryWeaponMasks + mainWeaponMasks); // layerMask는 2진수 연산 (0101 <- 1번째 레이어와 3번째 레이어가 켜져있다)으로 하기 때문에 겹치지 않으니 + 연산을 해도 됨
+            GunChange();
+            yield return new WaitForSeconds(findGunDelay);
         }
 
     }
+    public void interactionKey(InputAction.CallbackContext value)
+    {
+        if (value.started)
+        {
+            Debug.Log("hi");
+        }
+
+        
+    }
+
+
+
+    void GunChange()
+    {
+        if ((1 << selectGun.layer & mainWeaponMasks) != 0)
+        {
+            GunItems[0] = selectGun;
+        }
+        if ((1 << selectGun.layer & secondaryWeaponMasks) != 0)
+        {
+            GunItems[1] = selectGun;
+        }
+    }
+
 
     void GunColisionEnter()
     {
 
     }
 
-    GameObject FindGunInRedius(float red, int hitMask)
+    GameObject FindGunInRedius(float _rad, int _hitMask)
     {
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, red, hitMask);
-        closeGun = gameObject;
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, _rad, _hitMask);
+        GameObject closeGun = gameObject;
         foreach(var i in targetsInViewRadius)
         {
             if((Vector3.Distance(transform.position, i.transform.position) < Vector3.Distance(transform.position, closeGun.transform.position)) || closeGun == gameObject)
@@ -56,7 +87,7 @@ public class WeaponSystem : MonoBehaviour
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, gainGunRadius);
         Gizmos.color = Color.red;
-        if(closeGun != null)
-        Gizmos.DrawLine(transform.position, closeGun.transform.position);
+        if(selectGun != null)
+            Gizmos.DrawLine(transform.position, selectGun.transform.position);
     }
 }
