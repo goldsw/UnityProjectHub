@@ -34,7 +34,6 @@ public class WeaponSystem : MonoBehaviour
         while (true)
         {
             selectGun = FindGunInRedius(gainGunRadius, secondaryWeaponMasks + mainWeaponMasks); // layerMask는 2진수 연산 (0101 <- 1번째 레이어와 3번째 레이어가 켜져있다)으로 하기 때문에 겹치지 않으니 + 연산을 해도 됨
-            GunChange();
             yield return new WaitForSeconds(findGunDelay);
         }
 
@@ -43,7 +42,7 @@ public class WeaponSystem : MonoBehaviour
     {
         if (value.started)
         {
-            Debug.Log("hi");
+            GunChange();
         }
 
         
