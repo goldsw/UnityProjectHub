@@ -9,8 +9,16 @@ public class WeaponSystem : MonoBehaviour
     public PlayerIO _playerIO;
     private int secondaryWeaponMasks;
     private int mainWeaponMasks;
+
+    //무기 인덱스
+    [SerializeField]
+    private int mainIndex = 0;
+    [SerializeField]
+    private int secondIndex = 1;
+
     public float gainGunRadius;
     public float findGunDelay;
+    public GameObject gunHandle;
     private GameObject[] GunItems = new GameObject[2];
     GameObject selectGun;
     // Start is called before the first frame update
@@ -43,7 +51,7 @@ public class WeaponSystem : MonoBehaviour
         if (value.started)
         {
             GunChange();
-            Instantiate(GunItems[0], gameObject.transform.position, transform.rotation, transform);
+            
         }
 
         
@@ -55,14 +63,44 @@ public class WeaponSystem : MonoBehaviour
     {
         if ((1 << selectGun.layer & mainWeaponMasks) != 0)
         {
-            GunItems[0] = selectGun;
-            Destroy(selectGun);
+            if (GunItems[mainIndex] != null)
+            {
+                WeaponIsEnable(mainIndex);
+            }
+            if(GunItems[secondIndex] == true)//만약 손에 보조무기가 들려있다면. 보조무기를 집어넣음
+            {
+                GunItems[secondIndex].SetActive(false);
+            }
+            GunItems[mainIndex] = selectGun;
+            BoxCollider _colider = GunItems[0].GetComponent<BoxCollider>();
+            _colider.enabled = false;
+            GunItems[mainIndex].transform.parent = gunHandle.transform;
+            GunItems[mainIndex].transform.position = gunHandle.transform.position;
         }
         if ((1 << selectGun.layer & secondaryWeaponMasks) != 0)
         {
-            GunItems[1] = selectGun;
-            Destroy(selectGun);
+            if(GunItems[1] != null)
+            {
+                WeaponIsEnable(secondIndex);
+            }
+            if (GunItems[mainIndex] == true)
+            {
+                GunItems[mainIndex].SetActive(false);
+            }
+            GunItems[secondIndex] = selectGun;
+            BoxCollider _colider = GunItems[secondIndex].GetComponent<BoxCollider>();
+            _colider.enabled = false;
+            GunItems[secondIndex].transform.parent = gunHandle.transform;
+            GunItems[secondIndex].transform.position = gunHandle.transform.position;
+            //Destroy(selectGun);
         }
+    }
+    void WeaponIsEnable(int weaponindex)
+    {
+        BoxCollider _colider = GunItems[weaponindex].GetComponent<BoxCollider>();
+        GunItems[weaponindex].transform.parent = null;
+        GunItems[weaponindex].SetActive(true);
+        _colider.enabled = true;
     }
 
 
