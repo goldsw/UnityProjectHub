@@ -11,7 +11,7 @@ public class WeaponSystem : MonoBehaviour
     private int mainWeaponMasks;
     public float gainGunRadius;
     public float findGunDelay;
-    private GameObject[] GunItems = new GameObject[2]; //나중에 사용할 변수 0 1
+    private GameObject[] GunItems = new GameObject[2];
     GameObject selectGun;
     // Start is called before the first frame update
     void Start()
@@ -43,6 +43,7 @@ public class WeaponSystem : MonoBehaviour
         if (value.started)
         {
             GunChange();
+            Instantiate(GunItems[0], gameObject.transform.position, transform.rotation, transform);
         }
 
         
@@ -55,10 +56,12 @@ public class WeaponSystem : MonoBehaviour
         if ((1 << selectGun.layer & mainWeaponMasks) != 0)
         {
             GunItems[0] = selectGun;
+            Destroy(selectGun);
         }
         if ((1 << selectGun.layer & secondaryWeaponMasks) != 0)
         {
             GunItems[1] = selectGun;
+            Destroy(selectGun);
         }
     }
 
