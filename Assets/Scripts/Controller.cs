@@ -32,7 +32,7 @@ public class Controller : MonoBehaviour {
 		anim = GetComponentInChildren<Animator>();
 		Pcollider = GetComponent<CapsuleCollider>();
         speed = walkSpeed;
-		groundLayerMask = 1 << LayerMask.NameToLayer("Floor");
+		groundLayerMask |= (1 << LayerMask.NameToLayer("Floor")) | (1 << LayerMask.NameToLayer("Obstacles"));
     }
 
     public void RotActionKey(InputAction.CallbackContext value)
@@ -47,7 +47,9 @@ public class Controller : MonoBehaviour {
 
     void FixedUpdate()
     {
+		//IsGrounded();
 		Move();
+		
 	}
 
     //public void NewNextPos(float Angle)
@@ -105,13 +107,14 @@ public class Controller : MonoBehaviour {
 	void Move()
 	{
 		Vector3 acc = acceleration * speed;
-		Debug.Log(myRigidbody.velocity.y);
-		if (Mathf.Abs(myRigidbody.velocity.y) <= 0.01f)//
+		if (Mathf.Abs(myRigidbody.velocity.y) <= 0.01f)
 		{
 			myRigidbody.velocity += acc * Time.fixedDeltaTime;
 		}
 		else
-			myRigidbody.velocity *= 1f;
+			myRigidbody.velocity += acc * Time.fixedDeltaTime;
+
+//		myRigidbody.velocity *= 1f;
 	}
 	public void Jump(InputAction.CallbackContext value)
     {
@@ -137,6 +140,7 @@ public class Controller : MonoBehaviour {
     {
 		Ray ray = new Ray(transform.position, Vector3.down);
 		Physics.SphereCast(ray, Pcollider.radius, out groundHitInfo, 100f, groundLayerMask);
+		Debug.Log(groundLayerMask);
 
 	}
 
