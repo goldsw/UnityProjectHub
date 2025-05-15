@@ -2,7 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UseItem : MonoBehaviour
+public class Inventory : MonoBehaviour
 {
-    // 총이 아닌 아이템 사용처
+    int[] arr = new int[30];
+
+
+
+
+
+
+
+
+
+
+
 }

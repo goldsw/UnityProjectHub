@@ -21,14 +21,14 @@ public class FieldOfView : MonoBehaviour {
 
     public float maskCutawayDst = .1f;
 
-    Light light;
+    Light playerLight;
 
     public MeshFilter viewMeshFilter;
     Mesh viewMesh;
 
     private void Start()
     {
-        light = GetComponentInChildren<Light>();
+        playerLight = GetComponentInChildren<Light>();
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
@@ -39,7 +39,7 @@ public class FieldOfView : MonoBehaviour {
 
     private void Update()
     {
-        light.spotAngle = viewAngle;
+        playerLight.spotAngle = viewAngle;
         DrawFieldOfView();
     }
 

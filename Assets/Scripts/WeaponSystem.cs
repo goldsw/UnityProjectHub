@@ -28,13 +28,14 @@ public class WeaponSystem : MonoBehaviour
         secondaryWeaponMasks = 1 << LayerMask.NameToLayer("Pistol");
         mainWeaponMasks = 1 << LayerMask.NameToLayer("MachineGun");
         StartCoroutine(FindGun());
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(GunItems[0]);
-        Debug.Log(GunItems[1]);
+        //Debug.Log(GunItems[0]);
+        //Debug.Log(GunItems[1]);
     }
 
     IEnumerator FindGun()
@@ -63,7 +64,7 @@ public class WeaponSystem : MonoBehaviour
     {
         if ((1 << selectGun.layer & mainWeaponMasks) != 0)
         {
-            if (GunItems[mainIndex] != null)
+            if (GunItems[mainIndex] != null)//이미 무기가 있으면 버리는 코드
             {
                 WeaponIsEnable(mainIndex);
             }

@@ -13,7 +13,7 @@ public class CameraMoving : MonoBehaviour
     public float minZoom = 1f;
     public float CamVecRotSpeed = 1;
 
-    public GameObject camera;
+    public GameObject Maincamera;
     float camRot = 0;//카메라 벡터 위치 각도 돌려주는거, 로컬 각도 아님
     private Vector3 nextCamPos;
     protected Vector3 cameraVec;
@@ -29,7 +29,7 @@ public class CameraMoving : MonoBehaviour
         QEAction = _playerio.KeyBoard.Action;//PlayerIO에 있는 Action을 가져옴. 자세한건 new input system을 찾아보세요 앞 QE는 Q와 E를 눌렀을때 나오는 액션
         QEAction.Enable();//꼭 활성화 해줘야함
 
-        cameraVec = camera.transform.position - Player.transform.position;
+        cameraVec = Maincamera.transform.position - Player.transform.position;
         nextCamPos = (transform.position + cameraVec) * zoomCam;
         
     }
@@ -39,8 +39,12 @@ public class CameraMoving : MonoBehaviour
     {
         camRot += QEAction.ReadValue<float>() * Time.deltaTime;
         ZoomCam();
-        CameraLerpPos(Player, camera, CamVecRotSpeed);
+    }
+    private void FixedUpdate()
+    {
         CameraLerpRot();
+        CameraLerpPos(Player, Maincamera, CamVecRotSpeed);
+        
     }
 
     //private void FixedUpdate()
@@ -50,7 +54,7 @@ public class CameraMoving : MonoBehaviour
     void CameraLerpRot()
     {
         Quaternion target = Quaternion.LookRotation(Player.transform.position - transform.position, Vector3.up);// 대상 바라보게 하는 코드
-        transform.rotation = Quaternion.Lerp(transform.rotation, target, camRotLerpSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, target, camRotLerpSpeed * Time.fixedDeltaTime);
         
     }
 
@@ -58,7 +62,7 @@ public class CameraMoving : MonoBehaviour
     {
         Quaternion reRot = Quaternion.Euler(0, -camRot * speed, 0);
         nextCamPos = (Player.transform.position + reRot * cameraVec / zoomCam);//기즈모로 표시해둔 빨간 원 
-        camera.transform.position = Vector3.Lerp(camera.transform.position, nextCamPos, camPosLerpSpeed * Time.deltaTime);
+        camera.transform.position = Vector3.Lerp(camera.transform.position, nextCamPos, camPosLerpSpeed * Time.fixedDeltaTime);
     }
 
     void ZoomCam()

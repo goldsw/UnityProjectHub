@@ -3,41 +3,39 @@ using System.Collections;
 using UnityEngine.InputSystem;
 
 public class Controller : MonoBehaviour {
-
-	public float walkSpeed = 6;
-	public float sprintSpeed = 12;
+	private float speed;
+	public float walkSpeed;
+	public float sprintSpeed;
 	public LayerMask layerMask;
 	public PlayerIO _playerIO;
 	public float JumpPow;
-	public float acceleration;
-	public float deceleration;
-	private bool itIsExe = false;
-	private float runDec_Inertia = 0.5f;
-	private float runInc_Inertia = 0.5f; 
-	private float walkDec_Inertia = 1f;
-	private float walkInc_Inertia = 1f;
+	public Vector3 acceleration;
+	[Range(0,1)]
 
-	private Vector3 currentVelocity = Vector3.zero;
-	bool isRuning = false;
-	float speed;
-	Vector2 MoveVec;
+
+
+	Vector3 velocity = Vector3.zero;
 	CapsuleCollider Pcollider;
 	Rigidbody myRigidbody;
-	Vector3 velocity;
 	Animator anim;
 
 	bool rotcacul = false;
+	bool isRuning = false;
 	bool isJump = false;
 
-	void Start () {
+	int groundLayerMask;
+    private RaycastHit groundHitInfo;
+
+    void Start () {
 		_playerIO = new PlayerIO();
 		myRigidbody = GetComponent<Rigidbody> ();
 		anim = GetComponentInChildren<Animator>();
 		Pcollider = GetComponent<CapsuleCollider>();
-		speed = walkSpeed;
-	}
+        speed = walkSpeed;
+		groundLayerMask = 1 << LayerMask.NameToLayer("Floor");
+    }
 
-	public void RotActionKey(InputAction.CallbackContext value)
+    public void RotActionKey(InputAction.CallbackContext value)
     {
 		rotcacul = value.started || value.performed; //눌렀는가. 아직 안땠는가
     }
@@ -45,79 +43,75 @@ public class Controller : MonoBehaviour {
 
 	void Update () {
 		LookMousePos();
+	}
 
+    void FixedUpdate()
+    {
 		Move();
 	}
 
-	//void FixedUpdate()
-	//{
-	//
-	//}
-
-	//public void NewNextPos(float Angle)
+    //public void NewNextPos(float Angle)
     //{
-	//
+    //
     //}
-	public void OnMove(InputAction.CallbackContext value)
+    public void OnMove(InputAction.CallbackContext value)
 	{
-        if (value.started && !itIsExe && isRuning == false)
+        if (value.started)
         {
-			itIsExe = true;
-			StartCoroutine(RunInertia(walkDec_Inertia, walkInc_Inertia, isRuning));
-        }
 
-		MoveVec = value.ReadValue<Vector2>();
-		anim.SetBool("isWalking", value.performed);
+		}
+		if (value.performed)
+        {
+			acceleration = new Vector3(value.ReadValue<Vector2>().x, 0, value.ReadValue<Vector2>().y).normalized;
+			anim.SetBool("isWalking", true);
+			if(isRuning == false)
+            {
+				speed = walkSpeed;
+            }
+		}
+        if (!value.performed)
+        {
+			anim.SetBool("isWalking", false);
+
+		}
+		if (value.canceled)
+        {
+			acceleration = Vector3.zero;
+        }
 	}
+
+
 	public void IsRun(InputAction.CallbackContext value)
 	{
 		if (value.started)//눌렀다
         {
-			anim.SetBool("isRun", true);
 			isRuning = true;
-			speed = sprintSpeed;
         }
-		if (value.performed && !itIsExe)//누르고 있다
+		if (value.performed)//누르고 있다
 		{
-			itIsExe = true;
-			StartCoroutine(RunInertia(runDec_Inertia, runInc_Inertia, isRuning));
+			anim.SetBool("isRun", isRuning);
+			speed = sprintSpeed;
+			
 		}
 		if (value.canceled)//땠다
 		{
-			anim.SetBool("isRun", false);
 			isRuning = false;
-			speed = walkSpeed;
-
-
+			anim.SetBool("isRun", isRuning);
 		}
 	}
 	// _decIneria 는 멈출때의 관성이고, _inclnertia는 움직이려는 관성임. _check 값은 이걸 호출할 때 walk였는데 값이 바뀌면 코루틴을 멈춰줘야 하니까 넣은 값
-	IEnumerator RunInertia(float _decInertia, float _incInertia, bool _check)
-    {
-        while (isRuning == _check)
-        {
-			if((_check == false && acceleration > _incInertia - 0.05f) || (_check && acceleration + 0.05f < _incInertia))
-				break;
-
-			deceleration = Mathf.Lerp(deceleration, _decInertia, 0.4f);
-			acceleration = Mathf.Lerp(acceleration, _incInertia, 0.4f);
-
-			yield return new WaitForEndOfFrame();
-        }
-		itIsExe = false;
-		StopCoroutine("RunInertia");
-    }
 
 
 	void Move()
 	{
-		Vector3 targetVelocity = new Vector3(MoveVec.x, 0, MoveVec.y).normalized * speed;
-		float lerpFactor = (targetVelocity.sqrMagnitude > 0) ? acceleration : deceleration;
-		Vector3 desiredVelocity = Vector3.Lerp(myRigidbody.velocity, targetVelocity, lerpFactor * Time.deltaTime * 7);
-
-		desiredVelocity.y = myRigidbody.velocity.y;
-
-		myRigidbody.velocity = desiredVelocity;
+		Vector3 acc = acceleration * speed;
+		Debug.Log(myRigidbody.velocity.y);
+		if (Mathf.Abs(myRigidbody.velocity.y) <= 0.01f)//
+		{
+			myRigidbody.velocity += acc * Time.fixedDeltaTime;
+		}
+		else
+			myRigidbody.velocity *= 1f;
 	}
 	public void Jump(InputAction.CallbackContext value)
     {
@@ -128,24 +122,21 @@ public class Controller : MonoBehaviour {
     }
 	void Jumping()
     {
-
-		if (IsGrounded())
+		IsGrounded();
+		if (groundHitInfo.distance <= Pcollider.height / 2)
 		{
 			anim.SetTrigger("isJump");
+			velocity = Vector3.up * JumpPow;
 			myRigidbody.AddForce(Vector3.up * JumpPow, ForceMode.Impulse);
 			
 		}
 		
 	}
 
-	bool IsGrounded()
+	void IsGrounded()
     {
-		RaycastHit hitinfo;
-		Physics.Raycast(transform.position, Vector3.down, out hitinfo);
-		if (hitinfo.distance <= Pcollider.height / 2 + 0.3f)
-			return true;
-		else
-			return false;
+		Ray ray = new Ray(transform.position, Vector3.down);
+		Physics.SphereCast(ray, Pcollider.radius, out groundHitInfo, 100f, groundLayerMask);
 
 	}
 
@@ -157,6 +148,7 @@ public class Controller : MonoBehaviour {
 		mousePointDis.y = 0;
 		transform.rotation = Quaternion.LookRotation(mousePointDis);
 	}
+
 
     private void OnDrawGizmos()
     {
@@ -170,5 +162,10 @@ public class Controller : MonoBehaviour {
 			Gizmos.DrawSphere(hit.point, 0.3f); 
 
 		}
-    }
+		if (groundHitInfo.transform != null)
+		{
+			Gizmos.DrawLine(transform.position, groundHitInfo.point);
+			Gizmos.DrawSphere(groundHitInfo.point, Pcollider.radius);
+		}
+	}
 }
