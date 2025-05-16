@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    int[] arr = new int[30];
-
-
-
 
 
 

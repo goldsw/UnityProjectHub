@@ -112,7 +112,7 @@ public class Controller : MonoBehaviour {
 			myRigidbody.velocity += acc * Time.fixedDeltaTime;
 		}
 		else
-			myRigidbody.velocity += acc * Time.fixedDeltaTime;
+			myRigidbody.velocity *= 1f;
 
 //		myRigidbody.velocity *= 1f;
 	}
