@@ -118,16 +118,16 @@ public class Controller : MonoBehaviour {
 	{
 		Vector3 dir = Vector3.ProjectOnPlane(direction, RayToGround(groundLayerMask).normal).normalized;
 
-		Vector3 acc = dir * (acceleration / 10);
-		acc = Vector3.ClampMagnitude(acc, acceleration);
+		Vector3 acc = dir * acceleration * Time.fixedDeltaTime;
 		velocity += acc;
+		velocity = Vector3.ClampMagnitude(velocity, acceleration);
 		velocity *= friction;
 		if(dir == Vector3.zero && velocity.magnitude < 0.01f)
         {
 			velocity = Vector3.zero;
 			Debug.Log(velocity.magnitude);
         }
-		myRigidbody.AddForce(transform.position += velocity * Time.fixedDeltaTime);
+		myRigidbody.AddForce(transform.position + velocity * Time.fixedDeltaTime);
 
 	}
 	public void Jump(InputAction.CallbackContext value)
