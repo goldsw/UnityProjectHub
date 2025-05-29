@@ -38,7 +38,8 @@ public class Item : ScriptableObject
         injection,//주사하다
         Throw,//수류탄?
         Cure,//붕대? 구급상자?
-        gun//총일 경우
+        Secondary_Weapon,//총일 경우
+        Main_Weapon
     }
 
 
