@@ -5633,14 +5633,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056ababe32c5a8f438983220f5419a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
-  bullet: 0
-  gunIndex: 1
-  fireRate: 1
-  maxGunStorage: 10
-  currentGunStorage: 0
-  maxMyStorage: 100
-  currentMyStorage: 0
 --- !u!224 &1221783311 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1481288059357814953, guid: 4fb2b2bb233eb174f9b07075633de9e3, type: 3}
@@ -6475,11 +6467,15 @@ PrefabInstance:
     - target: {fileID: 1320823960428931244, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: b2e9d0f31fc9a4c45be76b2b6da340e9, type: 3}
+      objectReference: {fileID: 21300000, guid: ec2781fe61670874ebce087e4fa89592, type: 3}
     - target: {fileID: 2967497940934601440, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
       propertyPath: m_Name
       value: Item
       objectReference: {fileID: 0}
+    - target: {fileID: 3553837578232401779, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
+      propertyPath: testitem
+      value: 
+      objectReference: {fileID: 11400000, guid: 27cfc4fa997e3f64db423cad946088a2, type: 2}
     - target: {fileID: 4933788817514086976, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6988,14 +6984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056ababe32c5a8f438983220f5419a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: 
-  bullet: 0
-  gunIndex: 1
-  fireRate: 1
-  maxGunStorage: 10
-  currentGunStorage: 0
-  maxMyStorage: 100
-  currentMyStorage: 0
 --- !u!1001 &1449057826
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9798,10 +9786,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1341867348}
     m_Modifications:
+    - target: {fileID: 1320823960428931244, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ec2781fe61670874ebce087e4fa89592, type: 3}
     - target: {fileID: 2967497940934601440, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
       propertyPath: m_Name
       value: Item
       objectReference: {fileID: 0}
+    - target: {fileID: 3553837578232401779, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
+      propertyPath: testitem
+      value: 
+      objectReference: {fileID: 11400000, guid: 6f93c572de024f0469abdb03aa2228c1, type: 2}
     - target: {fileID: 4933788817514086976, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

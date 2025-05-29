@@ -10,13 +10,16 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("UI")]
     public Image image;
 
+    public Item testitem;
+
+
     [HideInInspector]
     public Item item;
     [HideInInspector] public Transform parentAfterDrag;
 
     private void Start()
     {
-        InitialiseItem(item);
+        InitialiseItem(testitem);
     }
 
     public void InitialiseItem(Item newItem)
