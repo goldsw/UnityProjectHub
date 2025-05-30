@@ -125,7 +125,6 @@ public class Controller : MonoBehaviour {
 		if(dir == Vector3.zero && velocity.magnitude < 0.01f)
         {
 			velocity = Vector3.zero;
-			Debug.Log(velocity.magnitude);
         }
 		myRigidbody.AddForce(transform.position + velocity * Time.fixedDeltaTime);
 
