@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour {
 	public float sprintSpeed;
 	public LayerMask layerMask;
 	public PlayerIO _playerIO;
+	public InputAction inputAction;
 	public float JumpPow;
 	public Vector3 direction;
 	public float friction;
@@ -27,6 +28,8 @@ public class Controller : MonoBehaviour {
 
     void Start () {
 		_playerIO = new PlayerIO();
+		_playerIO.Enable();
+		inputAction = _playerIO.KeyBoard.Run;
 		myRigidbody = GetComponent<Rigidbody> ();
 		anim = GetComponentInChildren<Animator>();
 		Pcollider = GetComponent<CapsuleCollider>();
@@ -42,6 +45,7 @@ public class Controller : MonoBehaviour {
 
 	void Update () {
 		//LookMousePos();
+		Debug.Log(inputAction.ReadValue<float>());
 	}
 
     void FixedUpdate()
