@@ -39,14 +39,13 @@ public class PlayerInput : MonoBehaviour
 
 		if (value.started)
 		{
-			Debug.Log("hi");
 		}
 		if (value.performed)
 		{
 
 			direction = new Vector3(value.ReadValue<Vector2>().x, 0, value.ReadValue<Vector2>().y).normalized;
+			playerMovement.inputDir = direction;
 			anim.SetBool("isWalking", true);
-			playerMovement.Move(direction, RunValue.ReadValue<float>());
 		}
 		if (!value.performed)
 		{
@@ -55,7 +54,7 @@ public class PlayerInput : MonoBehaviour
 		}
 		if (value.canceled)
 		{
-			direction = Vector3.zero;
+			playerMovement.inputDir = Vector3.zero;
 		}
 	}
 
@@ -63,7 +62,7 @@ public class PlayerInput : MonoBehaviour
 	{
 		if (value.started)//¥≠∑∂¥Ÿ
 		{
-
+			playerMovement.run = 1f;
 		}
 		if (value.performed)//¥©∏£∞Ì ¿÷¥Ÿ
 		{
@@ -72,6 +71,7 @@ public class PlayerInput : MonoBehaviour
 		}
 		if (value.canceled)//∂Æ¥Ÿ
 		{
+			playerMovement.run = 0f;
 			anim.SetBool("isWalking", false);
 
 		}

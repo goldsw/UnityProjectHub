@@ -8826,8 +8826,8 @@ GameObject:
   - component: {fileID: 2035742459}
   - component: {fileID: 2035742461}
   - component: {fileID: 2035742463}
-  - component: {fileID: 2035742464}
   - component: {fileID: 2035742465}
+  - component: {fileID: 2035742464}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -8926,7 +8926,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2035742452}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3ce368a8d8474fcbbed4f32d233445c, type: 3}
   m_Name: 
@@ -8936,6 +8936,15 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  inputAction:
+    m_Name: Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 28d8f37f-516f-4c38-a67d-220c4254894f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   JumpPow: 300
   direction: {x: 0, y: 0, z: 0}
   friction: 0.9
@@ -9013,8 +9022,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2035742457}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2035742465}
+        m_TargetAssemblyTypeName: PlayerInput, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -9022,25 +9031,13 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: OnMove
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: a2626c62-5237-4364-9e5a-3df3e264e419
     m_ActionName: KeyBoard/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2035742457}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
-        m_MethodName: RotActionKey
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: RotActionKey
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: edd89c14-76f4-408e-a9a5-d64b413086fd
     m_ActionName: KeyBoard/Action[/Keyboard/q,/Keyboard/e]
   - m_PersistentCalls:
@@ -9048,51 +9045,15 @@ MonoBehaviour:
     m_ActionId: 984ef087-0b49-48c9-a7ed-6ed4cce5faa7
     m_ActionName: Mouse/Mouse[/Mouse/leftButton,/Mouse/rightButton]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2035742457}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
-        m_MethodName: Jump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 62d6414a-0bd1-44eb-a99e-22572f9d1abb
     m_ActionName: KeyBoard/Jump[/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2035742457}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
-        m_MethodName: IsRun
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: bb3a763d-b039-45d1-8b93-216179d517fd
     m_ActionName: KeyBoard/Run[/Keyboard/shift]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2035742463}
-        m_TargetAssemblyTypeName: WeaponSystem, Assembly-CSharp
-        m_MethodName: interactionKey
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: c3dfb0db-29af-425f-a835-9caa35673d57
     m_ActionName: KeyBoard/Select[/Keyboard/f]
   - m_PersistentCalls:
@@ -9130,9 +9091,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2035742452}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c5a4421ea6f6954b8414a993d86aaaf, type: 3}
+  m_Script: {fileID: 11500000, guid: e5472621fbaa2474eabbe2120f33ad7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  runSpeed: 0.401
+  walkspeed: 5000000
+  friction: 0.9
+  inputDir: {x: 0, y: 0, z: 0}
+  run: 0
 --- !u!114 &2035742465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9145,6 +9111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5a4421ea6f6954b8414a993d86aaaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  playerMovement: {fileID: 0}
 --- !u!1001 &2060112184
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -36,13 +36,6 @@ public class Controller : MonoBehaviour {
         acceleration = walkSpeed;
 		groundLayerMask |= (1 << LayerMask.NameToLayer("Floor")) | (1 << LayerMask.NameToLayer("Obstacles"));
     }
-
-    public void RotActionKey(InputAction.CallbackContext value)
-    {
-		rotcacul = value.started || value.performed; //눌렀는가. 아직 안땠는가
-    }
-
-
 	void Update () {
 		//LookMousePos();
 		Debug.Log(inputAction.ReadValue<float>());
@@ -131,7 +124,7 @@ public class Controller : MonoBehaviour {
 			velocity = Vector3.zero;
         }
 		myRigidbody.AddForce(transform.position + velocity * Time.fixedDeltaTime);
-
+		Debug.Log(velocity.magnitude);
 	}
 	public void Jump(InputAction.CallbackContext value)
     {
