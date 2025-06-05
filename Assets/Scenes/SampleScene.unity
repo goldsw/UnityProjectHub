@@ -9045,11 +9045,35 @@ MonoBehaviour:
     m_ActionId: 984ef087-0b49-48c9-a7ed-6ed4cce5faa7
     m_ActionName: Mouse/Mouse[/Mouse/leftButton,/Mouse/rightButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2035742465}
+        m_TargetAssemblyTypeName: PlayerInput, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 62d6414a-0bd1-44eb-a99e-22572f9d1abb
     m_ActionName: KeyBoard/Jump[/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2035742465}
+        m_TargetAssemblyTypeName: PlayerInput, Assembly-CSharp
+        m_MethodName: IsRun
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: bb3a763d-b039-45d1-8b93-216179d517fd
     m_ActionName: KeyBoard/Run[/Keyboard/shift]
   - m_PersistentCalls:
@@ -9095,10 +9119,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 0.401
-  walkspeed: 5000000
-  friction: 0.9
-  inputDir: {x: 0, y: 0, z: 0}
+  friction: 0.94
   run: 0
+  walkspeed: 1000
+  inputDir: {x: 0, y: 0, z: 0}
+  JumpPow: 300
 --- !u!114 &2035742465
 MonoBehaviour:
   m_ObjectHideFlags: 0

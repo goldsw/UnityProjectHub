@@ -7,7 +7,8 @@ public class PlayerInput : MonoBehaviour
 	private Vector3 direction;
 	[HideInInspector] public PlayerMovement playerMovement;
 	public PlayerIO _playerIO;
-	InputAction RunValue;
+    private bool isRun = false;
+
     // Start is called before the first frame update
 
 
@@ -15,7 +16,6 @@ public class PlayerInput : MonoBehaviour
     {
 		_playerIO = new PlayerIO();
 		_playerIO.Enable();
-		RunValue = _playerIO.KeyBoard.Run;
 		anim = GetComponentInChildren<Animator>();
 		playerMovement = GetComponent<PlayerMovement>();
     }
@@ -26,12 +26,10 @@ public class PlayerInput : MonoBehaviour
 	}
     private void OnDisable()
     {
-		_playerIO.Disable();
     }
 
     private void Update()
     {
-		Debug.Log(RunValue.ReadValue<float>());
     }
 
     public void OnMove(InputAction.CallbackContext value)
@@ -62,25 +60,24 @@ public class PlayerInput : MonoBehaviour
 	{
 		if (value.started)//¥≠∑∂¥Ÿ
 		{
-			playerMovement.run = 1f;
+			isRun = true;
 		}
 		if (value.performed)//¥©∏£∞Ì ¿÷¥Ÿ
 		{
-			anim.SetBool("isWalking", true);
-
 		}
 		if (value.canceled)//∂Æ¥Ÿ
 		{
-			playerMovement.run = 0f;
-			anim.SetBool("isWalking", false);
-
+			isRun = false;
 		}
+		anim.SetBool("isRun", isRun);
+		playerMovement.run = value.ReadValue<float>();
+		Debug.Log(value.ReadValue<float>());
 	}
 	public void Jump(InputAction.CallbackContext value)
 	{
 		if (value.started)
 		{
-
+			playerMovement.Jumping(anim);
 		}
 	}
 }
