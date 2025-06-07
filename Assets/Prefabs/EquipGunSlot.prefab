@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7783418014325707217}
   - component: {fileID: 3768397485178697058}
   - component: {fileID: 5406430658344566562}
+  - component: {fileID: 2666731428183074239}
   m_Layer: 5
   m_Name: EquipGunSlot
   m_TagString: GunSlots
@@ -100,3 +101,15 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &2666731428183074239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9024229772927868366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933290b19028ec34fbc182e7f7102049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
