@@ -24,7 +24,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void InitialiseItem(Item newItem)
     {
+        MainWeaponSlots ma = transform.parent.GetComponent<MainWeaponSlots>();
         item = newItem;
+        if(ma != null)
+        {
+            image.sprite = newItem.GunImage;
+        }
+        else
         image.sprite = newItem.image;
     }
 
