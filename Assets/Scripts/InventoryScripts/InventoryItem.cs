@@ -27,6 +27,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void InitialiseItem(Item newItem)
     {
         Debug.Log(newItem);
+        Debug.LogError("지금 소환하면 NULL 참조 오류 뜰텐데 정상임 테스트 하느라 급하게 만들어서 뜨는거임 나중에 고침. 궁금하면 NULL 오류 따라 들어가보셈");
         MainWeaponSlots ma =  transform.parent.GetComponent<MainWeaponSlots>();
         item = newItem;
         if (ma != null)
