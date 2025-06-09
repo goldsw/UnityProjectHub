@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
 	CapsuleCollider Pcollider;
 	Rigidbody myRigidbody;
 	int groundLayerMask;
+	public GameObject cameraRotate;
 
     private void Start()
     {
@@ -30,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
 		myRigidbody = GetComponent<Rigidbody>();
 		Pcollider = GetComponent<CapsuleCollider>();
 		playerInput = GetComponent<PlayerInput>();
-	}
+    }
 
     private void FixedUpdate()
     {
@@ -48,7 +49,8 @@ public class PlayerMovement : MonoBehaviour
 
 	void Move()
 	{
-		dir = Vector3.ProjectOnPlane(inputDir, RayToGround(groundLayerMask).normal).normalized; // 바닥의 노멀 벡터를 찾아 바닥의 기울기에 따라 벡터를 바꿔줌, 경사진 바닥에서 잘 움직임
+        Quaternion rot = cameraRotate.transform.rotation;
+        dir = Vector3.ProjectOnPlane(rot * inputDir, RayToGround(groundLayerMask).normal).normalized; // 바닥의 노멀 벡터를 찾아 바닥의 기울기에 따라 벡터를 바꿔줌, 경사진 바닥에서 잘 움직임
 		acceleration = walkspeed * (1 + run * runSpeed); // 1 + run * runSpeed는 run이 1인 경우 연산됨 run이 0일시 1이 반환됨
 		Vector3 acc = acceleration * Time.fixedDeltaTime * dir;
 		if (dir == Vector3.zero && myRigidbody.velocity.magnitude < 0.01f)

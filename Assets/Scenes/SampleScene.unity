@@ -9916,23 +9916,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3ce368a8d8474fcbbed4f32d233445c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 900000
-  sprintSpeed: 1100000
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  inputAction:
-    m_Name: Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 28d8f37f-516f-4c38-a67d-220c4254894f
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  JumpPow: 300
-  direction: {x: 0, y: 0, z: 0}
-  friction: 0.9
 --- !u!54 &2035742458
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10109,6 +10092,7 @@ MonoBehaviour:
   walkspeed: 1000
   inputDir: {x: 0, y: 0, z: 0}
   JumpPow: 300
+  cameraRotate: {fileID: 963194225}
 --- !u!114 &2035742465
 MonoBehaviour:
   m_ObjectHideFlags: 0
