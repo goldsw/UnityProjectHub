@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class DragandDropSetter : MonoBehaviour
 {
-    public void 
+    
+    public void BeginDrag(GameObject gameObject)
+    {
+        
+    }
 
+    public void endOfDrag(Item item)
+    {
 
+    }
 
 
 
