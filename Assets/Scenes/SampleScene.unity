@@ -7048,10 +7048,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item
       objectReference: {fileID: 0}
-    - target: {fileID: 3553837578232401779, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
-      propertyPath: testitem
-      value: 
-      objectReference: {fileID: 11400000, guid: 27cfc4fa997e3f64db423cad946088a2, type: 2}
     - target: {fileID: 4933788817514086976, guid: e6b982befb3b6bd4ba271185ed8e1f5d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

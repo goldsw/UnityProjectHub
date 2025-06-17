@@ -25,7 +25,7 @@ public class Item : ScriptableObject
 
     [Header("UI")]
     public Sprite image;
-    public Sprite GunImage;
+    public Sprite equipImage;
 
 
     public enum ItemType

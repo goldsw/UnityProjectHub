@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6059350734243911723}
   - component: {fileID: 1320823960428931244}
   - component: {fileID: 3553837578232401779}
+  - component: {fileID: 1323762542367606353}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -89,4 +90,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1320823960428931244}
+  testitem: {fileID: 11400000, guid: 27cfc4fa997e3f64db423cad946088a2, type: 2}
+  item: {fileID: 0}
+  parentAfterDrag: {fileID: 0}
+  dragSetter: {fileID: 0}
+--- !u!114 &1323762542367606353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2967497940934601440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49a06d6c682b1443b1188cb21d57521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   parentAfterDrag: {fileID: 0}
