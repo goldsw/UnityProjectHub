@@ -57,7 +57,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        dragSetter.EndOfDrag(item, image);
+        dragSetter.EndOfDrag(item);
     }
 
 }

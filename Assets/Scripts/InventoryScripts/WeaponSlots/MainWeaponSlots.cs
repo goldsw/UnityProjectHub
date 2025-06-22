@@ -18,8 +18,14 @@ public class MainWeaponSlots : MonoBehaviour, IDropHandler
             if (transform.childCount >= 1)
             {
                 Transform swapParent = inventoryItem.dragSetter.parentAfterDrag;
-                transform.GetChild(0).transform.SetParent(swapParent);
+                Transform childitem = transform.GetChild(0);
+                InventoryItem childII = childitem.GetComponent<InventoryItem>();
+
+                childitem.transform.SetParent(swapParent);
                 inventoryItem.dragSetter.parentAfterDrag = transform;
+                childII.dragSetter.CheckSlots(childII.item);
+                inventoryItem.dragSetter.CheckSlots(inventoryItem.item);
+                
 
 
             }

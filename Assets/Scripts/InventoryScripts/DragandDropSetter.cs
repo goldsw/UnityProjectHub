@@ -8,9 +8,11 @@ public class DragandDropSetter : MonoBehaviour
     public Transform parentAfterDrag;
 
     InventoryItem inventoryItem;
+    Image image;
     private void Start()
     {
         inventoryItem = GetComponent<InventoryItem>();
+        image = inventoryItem.image;
     }
 
     public void BeginDrag(Item item, Image image)
@@ -23,20 +25,27 @@ public class DragandDropSetter : MonoBehaviour
         itemObject.transform.SetParent(transform.root);
     }
 
-    public void EndOfDrag(Item item, Image image)
+    public void EndOfDrag(Item item)
     {
         GameObject itemObject = inventoryItem.gameObject;
         image.raycastTarget = true;
 
         itemObject.transform.SetParent(parentAfterDrag);
 
+        CheckSlots(item);
+    }
+    
+    public void CheckSlots(Item item)
+    {
         if (!parentAfterDrag.GetComponent<InventorySlot>())
         {
             inventoryItem.NewSprite(item.equipImage);
         }
-
+        else
+        {
+            inventoryItem.NewSprite(item.image);
+        }
     }
-
 
 
 

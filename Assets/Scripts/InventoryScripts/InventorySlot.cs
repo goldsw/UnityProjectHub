@@ -19,7 +19,6 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             transform.GetChild(0).transform.SetParent(swapParent);
             inventoryItem.dragSetter.parentAfterDrag = transform;
 
-
         }
     }
 }
