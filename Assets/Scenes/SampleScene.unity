@@ -10000,6 +10000,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3ce368a8d8474fcbbed4f32d233445c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkSpeed: 0
+  sprintSpeed: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  inputAction:
+    m_Name: Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8a16356a-3400-4fda-a1db-43025be47bed
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  JumpPow: 0
+  direction: {x: 0, y: 0, z: 0}
+  friction: 0
 --- !u!54 &2035742458
 Rigidbody:
   m_ObjectHideFlags: 0
