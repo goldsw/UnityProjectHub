@@ -23,10 +23,9 @@ public class PlayerMovement : MonoBehaviour
 	CapsuleCollider Pcollider;
 	Rigidbody myRigidbody;
 	int groundLayerMask;
-	public GameObject cameraRotate;
-
-    private void Start()
-    {
+	public GameObject camera;
+	private void Start()
+    {		
 		groundLayerMask |= (1 << LayerMask.NameToLayer("Floor")) | (1 << LayerMask.NameToLayer("Obstacles"));
 		myRigidbody = GetComponent<Rigidbody>();
 		Pcollider = GetComponent<CapsuleCollider>();
@@ -35,57 +34,115 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+		//Debug.Log(1 - Vector3.Dot(transform.up, RayToGround(groundLayerMask).normal.normalized));
+
+
+		
+
 		Move();
 		if(inputDir != Vector3.zero)
         {
-			Quaternion angle = Quaternion.LookRotation(new Vector3(inputDir.x, 0, inputDir.z));
+			Quaternion angle = Quaternion.LookRotation( new Vector3(inputDir.x, 0, inputDir.z));
 			SetRotate(angle);
         }
+
     }
 	public void SetRotate(Quaternion targetAngle)
 	{
-		transform.rotation = Quaternion.Slerp(transform.rotation, targetAngle, 0.2f);
+		Quaternion watchrotation = Quaternion.Euler(0, camera.transform.rotation.eulerAngles.y, 0);
+		transform.rotation = watchrotation;
+	}
+
+	Vector3 GravityReaction(int layerMask)
+    {
+		Vector3 gravityReaction = CalculateGravityReaction(SphereRayToGround(groundLayerMask).normal.normalized, layerMask) * ReturnMultiplyADot(9.81f, layerMask);
+		Debug.Log(gravityReaction.magnitude);
+		return gravityReaction;
+    }
+
+	Vector3 CalculateGravityReaction(Vector3 normal, int layerMask) // 정규화 되어있어야 함
+    {
+		Vector3 target = RayToGround(layerMask).point + Vector3.up + ReturnMultiplyADot(Vector3.up, layerMask);
+		Vector3 disVector = (target - normal).normalized;
+		Debug.Log("업 벡터 크기" + target);
+		Debug.Log("노멀 벡터 크기" + normal);
+		Vector3 playerToDisVec = transform.position + disVector;
+		return playerToDisVec;
+
+
+    }
+
+	Vector3 ReturnMultiplyADot(Vector3 scale, int layerMask)
+    {
+		scale = scale * (1 - Vector3.Dot(Vector3.up, RayToGround(groundLayerMask).normal.normalized));
+		return scale;
+
+	}
+	float ReturnMultiplyADot(float scale, int layerMask)
+	{
+		scale = scale * (1 - Vector3.Dot(Vector3.up, RayToGround(groundLayerMask).normal.normalized));
+		Debug.Log(scale);
+		return scale;
+
 	}
 
 	void Move()
 	{
-        Quaternion rot = cameraRotate.transform.rotation;
-        dir = Vector3.ProjectOnPlane(rot * inputDir, RayToGround(groundLayerMask).normal).normalized; // 바닥의 노멀 벡터를 찾아 바닥의 기울기에 따라 벡터를 바꿔줌, 경사진 바닥에서 잘 움직임
+		Quaternion watchrotation = Quaternion.Euler(0, camera.transform.rotation.eulerAngles.y, 0);
+		dir = watchrotation * inputDir; // 바닥의 노멀 벡터를 찾아 바닥의 기울기에 따라 벡터를 바꿔줌, 경사진 바닥에서 잘 움직임
 		acceleration = walkspeed * (1 + run * runSpeed); // 1 + run * runSpeed는 run이 1인 경우 연산됨 run이 0일시 1이 반환됨
-		Vector3 acc = acceleration * Time.fixedDeltaTime * dir;
+		Vector3 acc = acceleration * dir;
 		if (dir == Vector3.zero && myRigidbody.velocity.magnitude < 0.01f)
 		{
 			myRigidbody.velocity = Vector3.zero;
 		}
-		myRigidbody.velocity += (acc * Time.fixedDeltaTime);
-		myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, acceleration);
-		myRigidbody.velocity = new Vector3(myRigidbody.velocity.x * friction, myRigidbody.velocity.y, myRigidbody.velocity.z * friction);
+		Vector3 GR = GravityReaction(groundLayerMask) + myRigidbody.velocity;
+		velocity += (acc);
+		velocity = new Vector3(velocity.x * friction, velocity.y, velocity.z * friction);
+		Vector3.ClampMagnitude(velocity, acceleration);
+		//myRigidbody.velocity += (acc * Time.fixedDeltaTime);
+		//myRigidbody.velocity = new Vector3(myRigidbody.velocity.x * friction, myRigidbody.velocity.y, myRigidbody.velocity.z * friction);
+		//myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, acceleration);
 
+
+		//myRigidbody.velocity = GR * Time.fixedDeltaTime;
+		
 	}
 
 	public void Jumping(Animator anim)
 	{
-		RaycastHit groundInfo = RayToGround(groundLayerMask);
+		RaycastHit groundInfo = SphereRayToGround(groundLayerMask);
 		if (groundInfo.distance <= Pcollider.height / 2)
 		{
 			anim.SetTrigger("isJump");
-			velocity = Vector3.up * JumpPow;
-			myRigidbody.AddForce(Vector3.up * JumpPow, ForceMode.Impulse);
+			velocity += Vector3.up * JumpPow;
+			//myRigidbody.AddForce(Vector3.up * JumpPow, ForceMode.Impulse);
 
 		}
 
 	}
 
-	public RaycastHit RayToGround(int layerMask)
+	public RaycastHit SphereRayToGround(int layerMask)
 	{
 		Ray ray = new Ray(transform.position, Vector3.down);
 		Physics.SphereCast(ray, Pcollider.radius, out RaycastHit groundHitInfo, 100f, layerMask);
 		return groundHitInfo;
 	}
-
-    private void OnDrawGizmos()
+	public RaycastHit RayToGround(int layerMask)
+	{
+		Ray ray = new Ray(transform.position, Vector3.down);
+		Physics.Raycast(ray, out RaycastHit groundHitInfo, 100f, layerMask);
+		return groundHitInfo;
+	}
+	private void OnDrawGizmos()
     {
-		if(myRigidbody != null)
-		Gizmos.DrawLine(transform.position, myRigidbody.velocity *100f);
-    }
+
+		//if(myRigidbody != null)
+		//Gizmos.DrawLine(transform.position, myRigidbody.velocity *100f);
+		Gizmos.color = Color.red;
+		Vector3 target = RayToGround(groundLayerMask).point + Vector3.up + ReturnMultiplyADot(Vector3.up, groundLayerMask);
+		Gizmos.DrawLine(RayToGround(groundLayerMask).point + RayToGround(groundLayerMask).normal.normalized, target);
+		Gizmos.DrawSphere(RayToGround(groundLayerMask).point + RayToGround(groundLayerMask).normal.normalized, 0.1f);
+		Gizmos.DrawSphere(target, 0.1f);
+	}
 }

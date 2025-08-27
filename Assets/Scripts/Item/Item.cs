@@ -30,6 +30,7 @@ public class Item : ScriptableObject
 
     public enum ItemType
     {
+        MainGun,
         Gun,
         Usingitem
     }

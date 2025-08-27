@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   obj: {fileID: 0}
-  type: 0
+  type: 1
   actionType: 4
   anim: {fileID: 0}
   bullet: {fileID: 5635662082101960324, guid: 8c6ab12a8e324014fa68935c51599455, type: 3}

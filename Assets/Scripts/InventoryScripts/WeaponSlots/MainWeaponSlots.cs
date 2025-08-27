@@ -6,26 +6,38 @@ using UnityEngine.EventSystems;
 
 public class MainWeaponSlots : MonoBehaviour, IDropHandler
 {
+    public Item.ItemType item_type;
     public void OnDrop(PointerEventData eventData)
     {
-        InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-        if(inventoryItem.item.type == Item.ItemType.Gun)
+
+        InventoryItem grabItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+        Transform swapParent = grabItem.dragSetter.parentAfterDrag;
+
+
+        if (grabItem.item.type == item_type || grabItem.GetComponent<InventorySlot>())
         {
             if (transform.childCount == 0)
             {
-                inventoryItem.dragSetter.parentAfterDrag = transform;
+                grabItem.dragSetter.parentAfterDrag = transform;
             }
             if (transform.childCount >= 1)
             {
-                Transform swapParent = inventoryItem.dragSetter.parentAfterDrag;
-                Transform childitem = transform.GetChild(0);
-                InventoryItem childII = childitem.GetComponent<InventoryItem>();
+                Transform equidedGun = transform.GetChild(0);
+                InventoryItem equidedinfo = equidedGun.GetComponent<InventoryItem>();
 
-                childitem.transform.SetParent(swapParent);
-                inventoryItem.dragSetter.parentAfterDrag = transform;
-                childII.dragSetter.CheckSlots(childII.item);
-                inventoryItem.dragSetter.CheckSlots(inventoryItem.item);
-                
+                if (grabItem.item.type == equidedinfo.item.type)
+                {
+                    //장착되있던 아이템이 빠져나감
+                    equidedinfo.dragSetter.parentAfterDrag = swapParent;
+                    equidedGun.transform.SetParent(swapParent);
+                    equidedinfo.dragSetter.CheckSlots(equidedinfo.item);
+
+                    //마우스가 갖고있던 
+                    grabItem.dragSetter.parentAfterDrag = transform;
+                    Debug.Log(equidedGun.name);
+                    Debug.Log(equidedinfo.image.sprite);
+                }
+
 
 
             }

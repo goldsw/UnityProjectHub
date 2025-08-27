@@ -8,17 +8,35 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 {
     public void OnDrop(PointerEventData eventData)
     {
-        InventoryItem inventoryItem = eventData.pointerDrag.GetComponent<InventoryItem>();
-        if(transform.childCount == 0)
+        InventoryItem grabItem = eventData.pointerDrag.GetComponent<InventoryItem>();
+        Transform swapParent = grabItem.dragSetter.parentAfterDrag;
+
+        if (transform.childCount == 0)
         {
-            inventoryItem.dragSetter.parentAfterDrag = transform;
+            grabItem.dragSetter.parentAfterDrag = transform;
         }
-        if(transform.childCount >= 1)
+        if (transform.childCount >= 1)
         {
-            Transform swapParent = inventoryItem.dragSetter.parentAfterDrag;
-            transform.GetChild(0).transform.SetParent(swapParent);
-            inventoryItem.dragSetter.parentAfterDrag = transform;
+            Transform equidedGun = transform.GetChild(0);
+            InventoryItem equidedinfo = equidedGun.GetComponent<InventoryItem>();
+
+            if (grabItem.item.type == equidedinfo.item.type)
+            {
+                //장착되있던 아이템이 빠져나감
+                equidedinfo.dragSetter.parentAfterDrag = swapParent;
+                equidedGun.transform.SetParent(swapParent);
+                equidedinfo.dragSetter.CheckSlots(equidedinfo.item);
+
+                //마우스가 갖고있던 
+                grabItem.dragSetter.parentAfterDrag = transform;
+                Debug.Log(equidedGun.name);
+                Debug.Log(equidedinfo.image.sprite);
+            }
+
+
 
         }
     }
+
+    
 }
