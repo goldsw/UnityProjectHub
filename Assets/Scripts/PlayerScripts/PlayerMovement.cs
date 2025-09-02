@@ -53,8 +53,8 @@ public class PlayerMovement : MonoBehaviour
     {
 		float dot = Vector3.Dot(Vector3.up, RayToGround(groundLayerMask).normal.normalized);
 		float sinTheta = Mathf.Sqrt(1.0f - dot * dot);
-		Debug.Log(sinTheta);
-		Vector3 gravityReaction = CalculateGravityReaction(RayToGround(groundLayerMask).normal.normalized, layerMask) * 9.81f * sinTheta;
+		Debug.Log(sinTheta * (myRigidbody.mass * 9.81f));
+		Vector3 gravityReaction = CalculateGravityReaction(RayToGround(groundLayerMask).normal.normalized, layerMask) * ((myRigidbody.mass * 9.81f) * sinTheta);
 
 		return gravityReaction;
     }
@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
 		Vector3 playerDisVec = transform.position + disVector;
 		Debug.DrawLine(transform.position, playerDisVec, Color.red);
 		
-		return playerDisVec;
+		return disVector;
 
 
     }
@@ -100,12 +100,12 @@ public class PlayerMovement : MonoBehaviour
 		//velocity += (acc);
 		//velocity = new Vector3(velocity.x * friction, velocity.y, velocity.z * friction);
 		//Vector3.ClampMagnitude(velocity, acceleration);
-		Debug.Log(GR.magnitude);
-		myRigidbody.AddForce(transform.position + myRigidbody.mass * GR * Time.fixedDeltaTime);
+		Debug.Log((GR).magnitude);
+		myRigidbody.AddForce(GR);
 		myRigidbody.velocity += (acc * Time.fixedDeltaTime);
 
-		myRigidbody.velocity = new Vector3(myRigidbody.velocity.x * friction, myRigidbody.velocity.y, myRigidbody.velocity.z * friction);
-		myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, acceleration);
+		//myRigidbody.velocity = new Vector3(myRigidbody.velocity.x * friction, myRigidbody.velocity.y, myRigidbody.velocity.z * friction);
+		//myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, acceleration);
 
 		//myRigidbody.velocity = GR * Time.fixedDeltaTime;
 
