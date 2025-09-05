@@ -5,9 +5,12 @@ using UnityEngine;
 public class bulletBehaviour : MonoBehaviour
 {
     // Update is called once per frame
+
+    public bulletStats stats;
+
     private void Start()
     {
-        
+        Destroy(gameObject, 3f);
     }
     public void fireStart(Vector3 position)
     {
@@ -34,12 +37,21 @@ public class bulletBehaviour : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter(Collision collision)
+
+    public void OnCollisionEnter(Collision collision)
     {
-        if(!collision.gameObject.CompareTag("Player"))
-            Debug.Log("Ä¡Áî»÷µå");
+        
         Destroy(gameObject);
     }
+
+    public struct bulletStats
+    {
+        public float damge;
+
+    }
+
+
+
 
 
 }

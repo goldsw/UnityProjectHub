@@ -39,7 +39,8 @@ public class FieldOfView : MonoBehaviour {
 
     private void Update()
     {
-        playerLight.spotAngle = viewAngle;
+        if(playerLight != null)
+            playerLight.spotAngle = viewAngle;
         DrawFieldOfView();
     }
 

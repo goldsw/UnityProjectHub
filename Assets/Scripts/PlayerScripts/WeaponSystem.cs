@@ -22,7 +22,7 @@ public class WeaponSystem : MonoBehaviour
     public GameObject gunHandle;
     public GameObject[] GunItems = new GameObject[2];
     GameObject selectGun;
-    GunStats[] Weapons = new GunStats[2];
+    GunStats[] Weapons;
     GunStats currentGun;
     GunStats noneItem = new GunStats
     {
@@ -38,6 +38,7 @@ public class WeaponSystem : MonoBehaviour
 
     private void Start()
     {
+        Weapons = new GunStats[2];
         groundLayerMask |= (1 << LayerMask.NameToLayer("Floor")) | (1 << LayerMask.NameToLayer("Obstacles"));
 
         for (int i = 0; i <= 1; i++)
@@ -99,6 +100,7 @@ public class WeaponSystem : MonoBehaviour
     {
         if (timer > currentgun.fireRate)
         {
+            currentGun = FindCurrentGun(gunindex);
             Debug.Log(currentgun.fireRate);
             fireGun(currentgun);
             timer = 0f;
@@ -113,8 +115,10 @@ public class WeaponSystem : MonoBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Physics.Raycast(ray, out rayinfo, 10000f, groundLayerMask);
 
-        GameObject bullet = Instantiate(currentgun.bullet,transform.position, Quaternion.LookRotation(rayinfo.point,Vector3.up));
+        Debug.Log(currentgun.bullet);
+        GameObject bullet = Instantiate(currentgun.bullet, transform.position, Quaternion.LookRotation(rayinfo.point - transform.position));
         bulletBehaviour bulletScript = bullet.GetComponent<bulletBehaviour>();
+        bulletScript.stats.damge = currentGun.damge;
         bulletScript.fireStart(rayinfo.point);
     }
 
