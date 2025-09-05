@@ -10,7 +10,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - bullet
   - Water
   - UI
   - Obstacles
@@ -20,7 +20,7 @@ TagManager:
   - Pistol
   - MachineGun
   - PlayerSkin
-  - 
+  - Player
   - 
   - 
   - 

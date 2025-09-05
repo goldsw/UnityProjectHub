@@ -16,119 +16,149 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField]
     private int secondIndex = 1;
 
+    public float timer;
     public float gainGunRadius;
     public float findGunDelay;
     public GameObject gunHandle;
-    private GameObject[] GunItems = new GameObject[2];
+    public GameObject[] GunItems = new GameObject[2];
     GameObject selectGun;
+    GunStats[] Weapons = new GunStats[2];
+    GunStats currentGun;
+    GunStats noneItem = new GunStats
+    {
+        bullet = null,
+        fullBullet = -1,
+        fireRate = 99999999999999,
+        damge = 0
+    };
+    int gunindex = 3;
+    int groundLayerMask;
+
     // Start is called before the first frame update
-    void Start()
-    {
-        _playerIO = new PlayerIO();
-        secondaryWeaponMasks = 1 << LayerMask.NameToLayer("Pistol");
-        mainWeaponMasks = 1 << LayerMask.NameToLayer("MachineGun");
-        StartCoroutine(FindGun());
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        //Debug.Log(GunItems[0]);
-        //Debug.Log(GunItems[1]);
-    }
+        groundLayerMask |= (1 << LayerMask.NameToLayer("Floor")) | (1 << LayerMask.NameToLayer("Obstacles"));
 
-    IEnumerator FindGun()
-    {
-        while (true)
+        for (int i = 0; i <= 1; i++)
         {
-            selectGun = FindGunInRedius(gainGunRadius, secondaryWeaponMasks + mainWeaponMasks); // layerMask는 2진수 연산 (0101 <- 1번째 레이어와 3번째 레이어가 켜져있다)으로 하기 때문에 겹치지 않으니 + 연산을 해도 됨
-            yield return new WaitForSeconds(findGunDelay);
+            Item item;
+            if (!(item = GunItems[i].GetComponentInChildren<InventoryItem>().item))
+            {
+                initializeGunState(i, noneItem);
+
+
+                continue;
+            }
+
+            Debug.Log(item.name);
+            initializeGunState(i, item);
+
         }
 
-    }
-    public void interactionKey(InputAction.CallbackContext value)
-    {
-        if (value.started)
-        {
-            GunChange();
-            
-        }
+        currentGun = FindCurrentGun(gunindex);
 
+
+
+    }
+
+    private void Update()
+    {
+
+        timer += 1 * Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            currentGun = FindCurrentGun(0);
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            currentGun = FindCurrentGun(1);
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+
+            TryfireGun(currentGun);
+        }
+    }
+    private GunStats FindCurrentGun(int index)
+    {
+        if(index != 3)
+            return Weapons[index];
+
+
+        for (int i = 0; i <= 1; i++)
+        {
+            if(GunItems[i] != null)
+            {
+                Debug.Log(Weapons[i].bullet);
+                return Weapons[i];
+            }
+
+        }
+        return new GunStats();
+    }
+    public void TryfireGun(GunStats currentgun)
+    {
+        if (timer > currentgun.fireRate)
+        {
+            Debug.Log(currentgun.fireRate);
+            fireGun(currentgun);
+            timer = 0f;
         
-    }
-
-
-
-    void GunChange()
-    {
-        if ((1 << selectGun.layer & mainWeaponMasks) != 0)
-        {
-            if (GunItems[mainIndex] != null)//이미 무기가 있으면 버리는 코드
-            {
-                WeaponIsEnable(mainIndex);
-            }
-            if(GunItems[secondIndex] == true)//만약 손에 보조무기가 들려있다면. 보조무기를 집어넣음
-            {
-                GunItems[secondIndex].SetActive(false);
-            }
-            GunItems[mainIndex] = selectGun;
-            BoxCollider _colider = GunItems[0].GetComponent<BoxCollider>();
-            _colider.enabled = false;
-            GunItems[mainIndex].transform.parent = gunHandle.transform;
-            GunItems[mainIndex].transform.position = gunHandle.transform.position;
-        }
-        if ((1 << selectGun.layer & secondaryWeaponMasks) != 0)
-        {
-            if(GunItems[1] != null)
-            {
-                WeaponIsEnable(secondIndex);
-            }
-            if (GunItems[mainIndex] == true)
-            {
-                GunItems[mainIndex].SetActive(false);
-            }
-            GunItems[secondIndex] = selectGun;
-            BoxCollider _colider = GunItems[secondIndex].GetComponent<BoxCollider>();
-            _colider.enabled = false;
-            GunItems[secondIndex].transform.parent = gunHandle.transform;
-            GunItems[secondIndex].transform.position = gunHandle.transform.position;
-            //Destroy(selectGun);
-        }
-    }
-    void WeaponIsEnable(int weaponindex)
-    {
-        BoxCollider _colider = GunItems[weaponindex].GetComponent<BoxCollider>();
-        GunItems[weaponindex].transform.parent = null;
-        GunItems[weaponindex].SetActive(true);
-        _colider.enabled = true;
-    }
-
-
-    void GunColisionEnter()
-    {
-
-    }
-
-    GameObject FindGunInRedius(float _rad, int _hitMask)
-    {
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, _rad, _hitMask);
-        GameObject closeGun = gameObject;
-        foreach(var i in targetsInViewRadius)
-        {
-            if((Vector3.Distance(transform.position, i.transform.position) < Vector3.Distance(transform.position, closeGun.transform.position)) || closeGun == gameObject)
-            closeGun = i.gameObject;
-        }
         
-        return closeGun;
+        }
+    }
+    public void fireGun(GunStats currentgun)
+    {
+        Ray ray;
+        RaycastHit rayinfo;
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Physics.Raycast(ray, out rayinfo, 10000f, groundLayerMask);
+
+        GameObject bullet = Instantiate(currentgun.bullet,transform.position, Quaternion.LookRotation(rayinfo.point,Vector3.up));
+        bulletBehaviour bulletScript = bullet.GetComponent<bulletBehaviour>();
+        bulletScript.fireStart(rayinfo.point);
     }
 
-    private void OnDrawGizmosSelected()
+
+
+
+
+    public void initializeGunState(int index, Item item)
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, gainGunRadius);
-        Gizmos.color = Color.red;
-        if(selectGun != null)
-            Gizmos.DrawLine(transform.position, selectGun.transform.position);
+
+        Weapons[index].fullBullet = item.maxbullet;
+        Weapons[index].fireRate = item.fireSpeed;
+        Weapons[index].damge = item.damge;
+        Weapons[index].bullet = item.bullet;
+        Debug.Log(Weapons[index].fullBullet);
+        Debug.Log(Weapons[index].fireRate);
+        Debug.Log(Weapons[index].damge);
+        Debug.Log(Weapons[index].bullet);
     }
+    public void initializeGunState(int index, GunStats item)
+    {
+
+        Weapons[index].fullBullet = item.fullBullet;
+        Weapons[index].fireRate = item.fireRate;
+        Weapons[index].damge = item.damge;
+        Weapons[index].bullet = item.bullet;
+        Debug.Log(Weapons[index].fullBullet);
+        Debug.Log(Weapons[index].fireRate);
+        Debug.Log(Weapons[index].damge);
+        Debug.Log(Weapons[index].bullet);
+    }
+
+
+    public struct GunStats
+    {
+        public int fullBullet;
+        public float fireRate;
+        public float damge;
+        public GameObject bullet;
+
+
+
+    }
+
+
+
 }

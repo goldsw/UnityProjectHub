@@ -17,6 +17,7 @@ public class Item : ScriptableObject
     public GameObject magazine; //사용할까?
     public int maxbullet;
     public float fireSpeed;
+    public float damge;
 
     [Header("겹칠 수 있는가?")]
     public bool stackable;
