@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
 		myRigidbody.velocity += (acc * Time.fixedDeltaTime);
 
 		//myRigidbody.velocity = new Vector3(myRigidbody.velocity.x * friction, myRigidbody.velocity.y, myRigidbody.velocity.z * friction);
-		//myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, acceleration);
+		myRigidbody.velocity = Vector3.ClampMagnitude(myRigidbody.velocity, acceleration);
 
 		//myRigidbody.velocity = GR * Time.fixedDeltaTime;
 

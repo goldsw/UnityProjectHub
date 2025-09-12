@@ -19,7 +19,7 @@ MonoBehaviour:
   bullet: {fileID: 9035473240668175309, guid: ce6f718b1dc6d634b9525631ba5033bc, type: 3}
   magazine: {fileID: 2001788842265486914, guid: 0014335436e0f464babe1ea170fffe91, type: 3}
   maxbullet: 10
-  fireSpeed: 1
+  fireSpeed: 0
   damge: 1
   stackable: 0
   currentStack: 0

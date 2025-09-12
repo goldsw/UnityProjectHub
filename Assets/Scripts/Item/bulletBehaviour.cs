@@ -7,6 +7,7 @@ public class bulletBehaviour : MonoBehaviour
     // Update is called once per frame
 
     public bulletStats stats;
+    public GameObject bulletHole;
 
     private void Start()
     {
@@ -40,7 +41,15 @@ public class bulletBehaviour : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
+        ContactPoint contact = collision.contacts[0];
+        Vector3 pos = contact.point;
+        Quaternion normal = Quaternion.LookRotation(
+            contact.normal - new Vector3(0, 0, 0), Vector3.up
+            ) ;
+
+        Instantiate(bulletHole, pos, normal);
         
+
         Destroy(gameObject);
     }
 

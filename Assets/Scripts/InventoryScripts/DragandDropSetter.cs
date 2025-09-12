@@ -7,6 +7,7 @@ public class DragandDropSetter : MonoBehaviour
 {
     public Transform parentAfterDrag;
 
+
     InventoryItem inventoryItem;
     Image image;
     private void Start()
@@ -33,6 +34,7 @@ public class DragandDropSetter : MonoBehaviour
         itemObject.transform.SetParent(parentAfterDrag);
 
         CheckSlots(item);
+        
     }
     
     public void CheckSlots(Item item)
