@@ -12,10 +12,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public Item testitem;
 
-
-    //[HideInInspector]
     public Item item;
-    [HideInInspector] public Transform parentAfterDrag;
     [HideInInspector] public DragandDropSetter dragSetter;
 
     private void Start()//오브젝트가 생성될때 Update보다 먼저 호출됨

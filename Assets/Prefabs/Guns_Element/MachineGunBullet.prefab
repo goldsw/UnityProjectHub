@@ -97,7 +97,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 4095
+    m_Bits: 3063
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 12296
@@ -199,7 +199,7 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 3063
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 12296

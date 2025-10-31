@@ -43,7 +43,8 @@ public class bulletBehaviour : MonoBehaviour
     {
         ContactPoint contact = collision.contacts[0];
         Vector3 pos = contact.point;
-        Quaternion normal = Quaternion.LookRotation(
+        Quaternion normal = 
+            Quaternion.LookRotation(
             contact.normal - new Vector3(0, 0, 0), Vector3.up
             ) ;
 
